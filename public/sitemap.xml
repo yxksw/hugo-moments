@@ -5,7 +5,7 @@
     <loc>http://localhost:1313/</loc>
     <lastmod>2026-03-31T21:30:44+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/2/</loc>
+    <loc>http://localhost:1313/posts/1/</loc>
     <lastmod>2026-03-31T21:30:44+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
@@ -16,12 +16,6 @@
   </url><url>
     <loc>http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2026-03-31T21:30:44+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/moments/1/</loc>
-    <lastmod>2026-03-31T21:08:44+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/moments/</loc>
-    <lastmod>2026-03-31T21:08:44+08:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url>
