@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>日常 on </title>
+    <link>http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/</link>
+    <description>Recent content in 日常 on </description>
+    <generator>Hugo</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 31 Mar 2026 21:08:44 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://localhost:1313/moments/1/</link>
+      <pubDate>Tue, 31 Mar 2026 21:08:44 +0800</pubDate>
+      <guid>http://localhost:1313/moments/1/</guid>
+      <description>&lt;p&gt;测试Memos说说&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

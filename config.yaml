@@ -1,0 +1,17 @@
+baseURL: https://memo.050815.xyz
+languageCode: zh-Hans
+theme: moments
+pagination:
+    path: .
+    pagerSize: 10
+
+params:
+    title: "YXK Moments"
+    signature: "每一段旅行，都有终点。"
+    cover: "https://cdn.jsdmirror.com/gh/zsxcoder/github-img@main/img/default-light.avif"
+
+    name: "异飨客"
+    avatar: "https://cn.cravatar.com/avatar/56cd72b5460ecaa08ddffea9562f5629?size=256"
+
+    experimental:
+        comment: true
