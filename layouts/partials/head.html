@@ -33,6 +33,14 @@
 {{ $style_2 := resources.Get "audio.scss" | toCSS | resources.Minify | resources.Fingerprint }}
 <link rel="stylesheet" href="{{ $style_2.RelPermalink }}">
 
+<!-- music player css -->
+{{ $music_style := resources.Get "music-player.scss" | toCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $music_style.RelPermalink }}">
+
+<!-- friends modal css -->
+{{ $friends_style := resources.Get "friends-modal.scss" | toCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $friends_style.RelPermalink }}">
+
 <!-- fancybox css (js in the end before the body closing tag) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"/>
 

@@ -28,3 +28,9 @@ params:
         repo: "Giscus"
         owner: "yxksw"
         admin: ["yxksw"]
+
+    music:
+        id: "13681647281"
+        server: "netease"
+        type: "playlist"
+        api: "https://meting2.050815.xyz/api"

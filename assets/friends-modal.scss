@@ -1,0 +1,573 @@
+// Friends Modal Styles - Adapted from icefox theme
+// 友链弹窗样式 - 参考 icefox 主题
+
+// ========================================
+// 友链按钮 - 左上角
+// ========================================
+.friends-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: currentColor;
+
+        path {
+            stroke: currentColor;
+        }
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.7);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ========================================
+// 友链弹窗背景
+// ========================================
+.friends-modal {
+    position: fixed;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+// ========================================
+// 友链弹窗容器
+// ========================================
+.friends-container {
+    width: 100%;
+    max-width: 576px;
+    max-height: 80vh;
+    background-color: var(--main-background, #ffffff);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--line, rgba(243, 244, 246, 1));
+    animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+// ========================================
+// 弹窗头部
+// ========================================
+.friends-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #07C160;
+    flex-shrink: 0;
+}
+
+.friends-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color, #333333);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+        color: #07C160;
+    }
+}
+
+.friends-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--text-sub-color, #555555);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+
+    &:hover {
+        background: var(--primary-background, #F7F7F7);
+        color: var(--text-color, #333333);
+        transform: rotate(90deg);
+    }
+}
+
+// ========================================
+// 友链内容区域
+// ========================================
+.friends-section {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(80vh - 100px);
+
+    // 自定义滚动条
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--primary-background-hover, #DEDEDE);
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--text-sub-color, #555555);
+    }
+}
+
+// ========================================
+// Qexo Friends 样式适配
+// ========================================
+#qexo-friends {
+    .qexo-friends {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .qexo-friend {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border-radius: 12px;
+        background-color: var(--primary-background, #F7F7F7);
+        border: 1px solid var(--line, rgba(243, 244, 246, 1));
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+            background-color: var(--primary-background-hover, #DEDEDE);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .qexo-friend-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        background-color: var(--main-background, #ffffff);
+        border: 2px solid var(--line, rgba(243, 244, 246, 1));
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .qexo-friend-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .qexo-friend-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-color, #333333);
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .qexo-friend-desc {
+        font-size: 13px;
+        color: var(--text-sub-color, #555555);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// ========================================
+// 加载状态
+// ========================================
+.friends-loading {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    .friends-spinner {
+        animation: spin 1s linear infinite;
+        color: #07C160;
+    }
+
+    p {
+        color: var(--text-sub-color, #555555);
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// ========================================
+// 错误状态
+// ========================================
+.friends-error {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    svg {
+        color: #dc3545;
+    }
+
+    p {
+        color: var(--text-sub-color, #555555);
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+// ========================================
+// 空状态
+// ========================================
+.friends-empty {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    svg {
+        color: var(--text-sub-color, #555555);
+    }
+
+    p {
+        color: var(--text-sub-color, #555555);
+        font-size: 14px;
+        margin: 0;
+    }
+}
+
+// ========================================
+// 深色模式适配 - 使用 [data-theme="dark"] 匹配博客主题
+// ========================================
+[data-theme="dark"] {
+    .friends-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    }
+
+    .friends-container {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        background-color: #2d2d2d !important;
+        border-color: #4a4a4a !important;
+    }
+
+    .friends-modal-header {
+        border-bottom-color: #07C160;
+    }
+
+    .friends-modal-title {
+        color: #e0e0e0 !important;
+
+        svg {
+            color: #07C160 !important;
+        }
+    }
+
+    .friends-modal-close {
+        color: #909090 !important;
+
+        &:hover {
+            background: #3a3a3a !important;
+            color: #e0e0e0 !important;
+        }
+    }
+
+    .friends-section {
+        &::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #909090;
+        }
+    }
+
+    // Qexo Friends 深色模式 - 使用更高优先级
+    #qexo-friends {
+        .qexo-friends {
+            background: transparent !important;
+        }
+
+        .qexo-friend,
+        a.qexo-friend,
+        div.qexo-friend {
+            background-color: #3a3a3a !important;
+            border: 1px solid #4a4a4a !important;
+            color: #ffffff !important;
+
+            &:hover {
+                background-color: #4a4a4a !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+            }
+
+            // 强制所有子元素继承白色
+            * {
+                color: #ffffff !important;
+            }
+        }
+
+        .qexo-friend-avatar {
+            background-color: #2d2d2d !important;
+            border: 2px solid #4a4a4a !important;
+        }
+
+        .qexo-friend-info {
+            background: transparent !important;
+
+            // 强制 info 内所有文字为白色
+            * {
+                color: #ffffff !important;
+            }
+        }
+
+        .qexo-friend-name {
+            color: #ffffff !important;
+
+            // 覆盖可能的 span 或其他元素
+            span, div, p, a {
+                color: #ffffff !important;
+            }
+        }
+
+        .qexo-friend-desc {
+            color: #cccccc !important;
+
+            // 覆盖可能的 span 或其他元素
+            span, div, p, a {
+                color: #cccccc !important;
+            }
+        }
+
+        // 直接选择所有文字元素
+        span, div, p, a, h1, h2, h3, h4, h5, h6 {
+            color: #ffffff !important;
+        }
+    }
+
+    // Qexo Friends 其他可能的选择器
+    .qexo-friends-container {
+        background: transparent !important;
+
+        // 容器内所有文字
+        * {
+            color: #ffffff !important;
+        }
+    }
+
+    .qexo-friends-list {
+        background: transparent !important;
+
+        // 列表内所有文字
+        * {
+            color: #ffffff !important;
+        }
+    }
+
+    .qexo-friends-item,
+    a.qexo-friends-item,
+    div.qexo-friends-item {
+        background-color: #3a3a3a !important;
+        border: 1px solid #4a4a4a !important;
+        color: #ffffff !important;
+
+        &:hover {
+            background-color: #4a4a4a !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        // item 内所有文字
+        * {
+            color: #ffffff !important;
+        }
+    }
+
+    // 强制覆盖内联样式
+    #qexo-friends [style] {
+        background-color: #3a3a3a !important;
+        color: #ffffff !important;
+    }
+
+    // 最后兜底 - 友链弹窗内所有文字
+    .friends-section {
+        * {
+            color: #ffffff !important;
+        }
+    }
+}
+
+// ========================================
+// 响应式设计
+// ========================================
+@media (max-width: 768px) {
+    .friends-btn {
+        top: 10px;
+        left: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        span {
+            display: none;
+        }
+    }
+
+    .friends-container {
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .friends-modal-title {
+        font-size: 18px;
+    }
+
+    .friends-section {
+        max-height: 70vh;
+    }
+
+    #qexo-friends {
+        .qexo-friend {
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .qexo-friend-avatar {
+            width: 40px;
+            height: 40px;
+        }
+
+        .qexo-friend-name {
+            font-size: 14px;
+        }
+
+        .qexo-friend-desc {
+            font-size: 12px;
+        }
+    }
+}
+
+// ========================================
+// 适配 Qexo Friends 默认样式覆盖
+// ========================================
+.qexo-friends-container {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.qexo-friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.qexo-friends-item {
+    background-color: var(--primary-background, #F7F7F7) !important;
+    border: 1px solid var(--line, rgba(243, 244, 246, 1)) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    transition: all 0.2s ease !important;
+
+    &:hover {
+        background-color: var(--primary-background-hover, #DEDEDE) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+}

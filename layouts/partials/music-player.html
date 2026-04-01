@@ -1,0 +1,78 @@
+<!-- Music Player - LiuShen Style -->
+<div id="nav-music">
+    <div id="nav-music-hoverTips" onclick="liuMusic.musicToggle()">点击播放</div>
+    <div id="meting-container"></div>
+</div>
+
+<!-- APlayer CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+<!-- APlayer JS -->
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<!-- MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+{{ $music := .Site.Params.music }}
+<script>
+// Music configuration from config.yaml
+const musicConfig = {
+    id: '{{ $music.id | default "13681647281" }}',
+    server: '{{ $music.server | default "netease" }}',
+    type: '{{ $music.type | default "playlist" }}',
+    api: '{{ $music.api | default "https://meting2.050815.xyz/api" }}'
+};
+
+// Create MetingJS element
+const metingContainer = document.getElementById('meting-container');
+const metingJs = document.createElement('meting-js');
+metingJs.setAttribute('id', musicConfig.id);
+metingJs.setAttribute('server', musicConfig.server);
+metingJs.setAttribute('type', musicConfig.type);
+metingJs.setAttribute('mutex', 'true');
+metingJs.setAttribute('preload', 'none');
+metingJs.setAttribute('data-lrctype', '0');
+metingJs.setAttribute('order', 'random');
+metingJs.setAttribute('volume', '0.8');
+metingJs.setAttribute('api', musicConfig.api);
+metingContainer.appendChild(metingJs);
+
+// LiuShen Music Controller
+const liuMusic = {
+    musicPlaying: false,
+    isMusicBind: false,
+
+    musicToggle(isMeting = true) {
+        if (!this.isMusicBind) {
+            this.musicBind();
+        }
+
+        const $music = document.querySelector("#nav-music");
+        const $meting = document.querySelector("meting-js");
+
+        this.musicPlaying = !this.musicPlaying;
+        $music?.classList.toggle("playing", this.musicPlaying);
+        $music?.classList.toggle("stretch", this.musicPlaying);
+
+        if (isMeting && $meting?.aplayer) {
+            this.musicPlaying ? $meting.aplayer.play() : $meting.aplayer.pause();
+        }
+    },
+
+    musicBind() {
+        const $music = document.querySelector("#nav-music");
+        const $name = document.querySelector("#nav-music .aplayer-music");
+        const $button = document.querySelector("#nav-music .aplayer-button");
+
+        $name?.addEventListener("click", () => {
+            $music?.classList.toggle("stretch");
+        });
+
+        $button?.addEventListener("click", () => {
+            this.musicToggle(false);
+        });
+
+        this.isMusicBind = true;
+    }
+};
+</script>
