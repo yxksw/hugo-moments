@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=49993&amp;path=livereload" data-no-instant defer></script>
         <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -94,7 +94,7 @@
     </button>
     <div class="container">
         <div class="site-title">
-            <a href="http://localhost:1313/">YXK Moments</a>
+            <a href="http://localhost:49993/">YXK Moments</a>
         </div>
         <p class="signature">每一段旅行，都有终点。</p>
     </div>
@@ -274,7 +274,7 @@
                             
                             var gitalk = new Gitalk({
                                 clientID: 'Ov23liiilSoYdEjrWNYd',
-                                clientSecret: '',
+                                clientSecret: 'bdc91743ea5474694ecd3b03051f09ab2e778660',
                                 repo: 'Giscus',
                                 owner: 'yxksw',
                                 admin: "[\"yxksw\"]",
@@ -370,7 +370,7 @@ const musicConfig = {
     id: '13681647281',
     server: 'netease',
     type: 'playlist',
-    api: 'https:\/\/meting2.050815.xyz\/api'
+    api: 'https:\/\/meting-api.314926.xyz\/api'
 };
 
 
@@ -384,7 +384,7 @@ metingJs.setAttribute('preload', 'none');
 metingJs.setAttribute('data-lrctype', '0');
 metingJs.setAttribute('order', 'random');
 metingJs.setAttribute('volume', '0.8');
-metingJs.setAttribute('api', musicConfig.api);
+metingJs.setAttribute('api', musicConfig.api + '?server=:server&type=:type&id=:id&auth=:auth&r=:r');
 metingContainer.appendChild(metingJs);
 
 

@@ -175,13 +175,13 @@ const musicConfig = {
     id: '13681647281',
     server: 'netease',
     type: 'playlist',
-    api: 'https:\/\/meting2.050815.xyz\/api'
+    api: 'https:\/\/meting-api.314926.xyz\/api'
 };
 
 
 const metingContainer = document.getElementById('meting-container');
 const metingJs = document.createElement('meting-js');
-metingJs.setAttribute('id', musicConfig.id);
+metingJs.setAttribute('data-id', musicConfig.id);
 metingJs.setAttribute('server', musicConfig.server);
 metingJs.setAttribute('type', musicConfig.type);
 metingJs.setAttribute('mutex', 'true');
