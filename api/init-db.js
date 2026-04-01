@@ -8,9 +8,17 @@ export default async function handler(req) {
   if (corsResponse) return corsResponse;
 
   try {
-    // Only allow POST requests for initialization
-    if (req.method !== 'POST') {
+    // Allow POST and GET requests for initialization
+    if (req.method !== 'POST' && req.method !== 'GET') {
       return createResponse({ error: 'Method not allowed' }, 405);
+    }
+
+    // Check if DATABASE_URL is set
+    if (!process.env.DATABASE_URL) {
+      return createResponse({ 
+        error: 'DATABASE_URL environment variable is not set',
+        hint: 'Please set the DATABASE_URL environment variable in Vercel project settings'
+      }, 500);
     }
 
     // Initialize database
@@ -25,7 +33,8 @@ export default async function handler(req) {
     console.error('Database initialization error:', error);
     return createResponse({ 
       error: 'Failed to initialize database',
-      message: error.message 
+      message: error.message,
+      hint: 'Please check your DATABASE_URL and ensure the database is accessible'
     }, 500);
   }
 }
