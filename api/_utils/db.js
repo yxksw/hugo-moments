@@ -1,4 +1,7 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, neonConfig } from '@neondatabase/serverless';
+
+// Configure neon for serverless environment
+neonConfig.fetchConnectionCache = true;
 
 // Initialize Neon database connection
 export const getDb = () => {
@@ -6,6 +9,13 @@ export const getDb = () => {
     throw new Error('DATABASE_URL environment variable is not set');
   }
   return neon(process.env.DATABASE_URL);
+};
+
+// Test database connection
+export const testConnection = async () => {
+  const sql = getDb();
+  const result = await sql`SELECT NOW() as now`;
+  return result[0].now;
 };
 
 // Initialize database tables

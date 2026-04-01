@@ -1,4 +1,4 @@
-import { initDb } from './_utils/db.js';
+import { testConnection, initDb } from './_utils/db.js';
 import { handleCors, createResponse } from './_utils/cors.js';
 
 // Initialize database tables
@@ -21,12 +21,25 @@ export default async function handler(req) {
       }, 500);
     }
 
-    // Initialize database
+    // Test connection first
+    let connectionTest;
+    try {
+      connectionTest = await testConnection();
+    } catch (connError) {
+      return createResponse({ 
+        error: 'Database connection failed',
+        message: connError.message,
+        hint: 'Please check your DATABASE_URL and ensure the database is accessible from Vercel'
+      }, 500);
+    }
+
+    // Initialize database tables
     await initDb();
 
     return createResponse({
       success: true,
       message: 'Database initialized successfully',
+      connectionTest: connectionTest,
     });
 
   } catch (error) {
