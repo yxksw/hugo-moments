@@ -1,5 +1,59 @@
 @import 'scss-resources/countdown-day.scss';
 
+// CSS Variables for light/dark theme
+:root {
+    --bg-color: #f5f5f5;
+    --page-bg: #ffffff;
+    --text-color: rgb(33, 37, 41);
+    --text-secondary: #525960;
+    --text-muted: #6c757d;
+    --code-bg: #e3e6e8;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --tag-bg: #EDEDED;
+    --tag-text: #132939;
+    --tag-icon-bg: #8EA1B0;
+    --link-color: #0059b3;
+    --name-color: #186D9C;
+    --note-color: #808080;
+    --blockquote-border: #c8ccd0;
+    --footer-bg: #f5f5f5;
+    --footer-text: #6c757d;
+    --pagination-hover: #f5f5f5;
+    --link-block-bg: #f7f7f7;
+    --link-text: #17a2b8;
+    --marker-color: #919EB1;
+    --back-top-bg: #d1d1d1;
+    --back-top-text: #3a6ba5;
+    --jumbotron-title: #ffffff;
+    --jumbotron-signature: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --page-bg: #2d2d2d;
+    --text-color: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-muted: #909090;
+    --code-bg: #3d3d3d;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --tag-bg: #3a3a3a;
+    --tag-text: #e0e0e0;
+    --tag-icon-bg: #5a5a5a;
+    --link-color: #64b5f6;
+    --name-color: #4fc3f7;
+    --note-color: #a0a0a0;
+    --blockquote-border: #4a4a4a;
+    --footer-bg: #1a1a1a;
+    --footer-text: #909090;
+    --pagination-hover: #3a3a3a;
+    --link-block-bg: #2a2a2a;
+    --link-text: #4fc3f7;
+    --marker-color: #606060;
+    --back-top-bg: #4a4a4a;
+    --back-top-text: #64b5f6;
+    --jumbotron-signature: rgba(255, 255, 255, 0.7);
+}
+
 // helper class & functional class
 .center{
     display: flex;
@@ -8,7 +62,8 @@
 
 // style for main framework
 body{
-    background-color: #f5f5f5;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease;
 }
 
 .pure-g [class*=pure-u]{
@@ -16,7 +71,8 @@ body{
     font-weight: normal;
     font-size: 16px;
     line-height: 24px;
-    color: rgb(33, 37, 41);
+    color: var(--text-color);
+    transition: color 0.3s ease;
 
     code {
         font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, "Microsoft YaHei", monospace;
@@ -24,9 +80,10 @@ body{
 
     :not(pre) > code {
         font-size: 14px;
-        background-color: #e3e6e8;
+        background-color: var(--code-bg);
         padding: 2px 4px;
         border-radius: 3px;
+        transition: background-color 0.3s ease;
     }
 
     .highlight {
@@ -47,7 +104,8 @@ body{
         overflow: hidden;
         margin: 0 16px 16px 16px;
         padding: 16px 0 0 16px;
-        color: #525960;
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
 
         &::before {
             content: "";
@@ -58,7 +116,8 @@ body{
             left: 0;
             width: 4px;
             border-radius: 2px;
-            background: #c8ccd0;
+            background: var(--blockquote-border);
+            transition: background 0.3s ease;
         }
 
         mark { // fix color for mark inside blockquote
@@ -81,7 +140,8 @@ body{
 .page{
     max-width: 1150px;
     margin: auto;
-    background-color: white;
+    background-color: var(--page-bg);
+    transition: background-color 0.3s ease;
 }
 
 .container{
@@ -133,7 +193,7 @@ p{
     margin-bottom: 30px;
 
     .site-title a{
-        color: #ffffff;
+        color: var(--jumbotron-title);
         font-size: 56px;
         font-weight: 300;
         margin-bottom: 20px;
@@ -141,7 +201,7 @@ p{
     }
     
     .signature{
-        color: rgba(0, 0, 0, 0.5);
+        color: var(--jumbotron-signature);
         font-size: 20px;
         font-weight: 300;
     }
@@ -181,7 +241,8 @@ $gray: #919EB1;
     }
 
     .page-link .page-item:hover{
-        background-color: #f5f5f5;
+        background-color: var(--pagination-hover);
+        transition: background-color 0.3s ease;
     }
 }
 /* END - pagination */
@@ -233,10 +294,11 @@ $gray: #919EB1;
         padding-left: 5px;
 
         .name{
-            color:#186D9C!important;
+            color: var(--name-color)!important;
             margin-bottom: 0;
             line-height: 1.1;
             font-size: 24px;
+            transition: color 0.3s ease;
         }
 
         div:nth-child(2) {
@@ -246,8 +308,9 @@ $gray: #919EB1;
 
         .moment-signature{
             font-size: 80%;
-            color: #6c757d!important;
+            color: var(--text-muted)!important;
             white-space: nowrap;
+            transition: color 0.3s ease;
         }
     }
 
@@ -263,9 +326,10 @@ $gray: #919EB1;
 
     a {
         text-decoration: none;
-        color: #0059b3;
+        color: var(--link-color);
+        transition: color 0.3s ease;
         &:visited {
-            color: #0059b3;
+            color: var(--link-color);
         }
         &::after {
             padding-left: 3px;
@@ -287,7 +351,8 @@ $gray: #919EB1;
         padding-left: 5px;
 
         &::marker {
-            color: #919EB1;
+            color: var(--marker-color);
+            transition: color 0.3s ease;
         }
     }
 
@@ -295,7 +360,8 @@ $gray: #919EB1;
         padding-left: 5px;
 
         &::marker {
-            color: #919EB1;
+            color: var(--marker-color);
+            transition: color 0.3s ease;
         }
     }
 }
@@ -316,8 +382,9 @@ $gray: #919EB1;
         
 		border-radius: 15px;
 
-        background-color: #EDEDED;
-        color: #132939;
+        background-color: var(--tag-bg);
+        color: var(--tag-text);
+        transition: background-color 0.3s ease, color 0.3s ease;
 
         text-indent: -10px;
         font-size: 90%;
@@ -327,7 +394,7 @@ $gray: #919EB1;
             content:"#";
             text-align: center;
 
-            background-color: #8EA1B0;
+            background-color: var(--tag-icon-bg);
             color: #ffffff;
 
             padding-top: 1px;
@@ -343,7 +410,7 @@ $gray: #919EB1;
 
         .new-tag-cnt {
             font-size: 80%;
-            color: #8EA1B0;
+            color: var(--tag-icon-bg);
         }
     }
 
@@ -423,7 +490,8 @@ $gray: #919EB1;
     padding-bottom:10px; 
     padding-top:10px; 
     margin-bottom:10px;
-    background: #f7f7f7;
+    background: var(--link-block-bg);
+    transition: background 0.3s ease;
 
     .link-table{
         margin-left: 10%;
@@ -436,9 +504,10 @@ $gray: #919EB1;
     }
 
     a{
-        color:#17a2b8;
+        color: var(--link-text);
         word-wrap: break-word;
         text-decoration: none;
+        transition: color 0.3s ease;
     }
 }
 
@@ -463,11 +532,13 @@ $gray: #919EB1;
     display: flex;
     margin-bottom: 10px;
     justify-content: space-between;
-    color:#808080;
+    color: var(--note-color);
+    transition: color 0.3s ease;
 
     .note{
         font-size: 80%;
-        color: rgba(0, 0, 0, 0.5);
+        color: var(--text-muted);
+        transition: color 0.3s ease;
     
         margin-top: 0;
         margin-bottom: 0;
@@ -511,15 +582,17 @@ hr {
 .footer {
     padding-top: 20px;
     padding-bottom: 30px;
-    background-color: #f5f5f5;
+    background-color: var(--footer-bg);
+    transition: background-color 0.3s ease;
     
-    color: #6c757d !important;
+    color: var(--footer-text) !important;
     text-align: center;
     font-size: 95%;
 
     a{ 
         text-decoration: underline !important; 
-        color:#6c757d !important;
+        color: var(--footer-text) !important;
+        transition: color 0.3s ease;
     } 
 }
 /* END - footer*/
@@ -536,15 +609,216 @@ hr {
     border: none;
     outline: none;
 
-    background-color: #d1d1d1; /* Set a background color */
-    color: #3a6ba5; /* Text color */
+    background-color: var(--back-top-bg);
+    color: var(--back-top-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
 
     opacity: 0.85;
 
-    cursor: pointer; /* Add a mouse pointer on hover */
+    cursor: pointer;
 
     padding: 12px;
     border-radius: 10px; 
     font-size: 20px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: fixed;
+    bottom: 80px;
+    right: 30px;
+    z-index: 99;
+    
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    background-color: var(--back-top-bg);
+    color: var(--back-top-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    opacity: 0.85;
+    
+    &:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    
+    &:active {
+        transform: scale(0.95);
+    }
+    
+    .sun-icon {
+        display: block;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .moon-icon {
+        display: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+}
+
+[data-theme="dark"] .theme-toggle {
+    background-color: var(--back-top-bg);
+    
+    &:hover {
+        opacity: 1;
+    }
+    
+    .sun-icon {
+        display: none;
+    }
+    
+    .moon-icon {
+        display: block;
+    }
+}
+
+@media (max-width: 720px) {
+    .theme-toggle {
+        bottom: 70px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+/* Gitalk dark theme support */
+[data-theme="dark"] {
+    .gt-container {
+        color: #ffffff !important;
+        
+        * {
+            color: #ffffff !important;
+        }
+        
+        a, .gt-link, .gt-comment-username {
+            color: #64b5f6 !important;
+        }
+        
+        .gt-header-textarea {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            border-color: #4a4a4a !important;
+            
+            &::placeholder {
+                color: #909090 !important;
+            }
+            
+            &:focus {
+                background-color: #2d2d2d !important;
+                color: #ffffff !important;
+            }
+        }
+        
+        .gt-btn {
+            background-color: #4a4a4a !important;
+            color: #ffffff !important;
+            border-color: #4a4a4a !important;
+            
+            &:hover {
+                background-color: #5a5a5a !important;
+            }
+        }
+        
+        .gt-btn-preview {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            border-color: #4a4a4a !important;
+            
+            &:hover {
+                background-color: #3a3a3a !important;
+            }
+        }
+        
+        .gt-meta {
+            border-color: #4a4a4a !important;
+        }
+        
+        .gt-svg svg {
+            fill: #ffffff !important;
+        }
+        
+        .gt-comment-content {
+            background-color: #2d2d2d !important;
+            color: #ffffff !important;
+            
+            p, .gt-comment-body {
+                color: #ffffff !important;
+                
+                * {
+                    color: #ffffff !important;
+                }
+            }
+            
+            blockquote {
+                background-color: #3a3a3a !important;
+                color: #ffffff !important;
+                border-left-color: #4a4a4a !important;
+                
+                * {
+                    color: #ffffff !important;
+                }
+            }
+        }
+        
+        .gt-comment-admin {
+            .gt-comment-content {
+                background-color: #2d2d2d !important;
+            }
+        }
+        
+        .gt-ico-text {
+            color: #ffffff !important;
+        }
+        
+        .gt-spinner::before {
+            border-color: #64b5f6 !important;
+        }
+        
+        .gt-user-inner {
+            color: #ffffff !important;
+        }
+        
+        .gt-popup {
+            background-color: #2d2d2d !important;
+            border-color: #4a4a4a !important;
+            
+            .gt-action {
+                color: #ffffff !important;
+                
+                &.is--active {
+                    color: #64b5f6 !important;
+                }
+            }
+        }
+        
+        .gt-comment-body {
+            color: #ffffff !important;
+            
+            * {
+                color: #ffffff !important;
+            }
+        }
+        
+        .gt-comment-username {
+            color: #64b5f6 !important;
+        }
+        
+        .gt-comment-date, .gt-time {
+            color: #909090 !important;
+        }
+    }
 }
   

@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>日常 on </title>
-    <link>http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/</link>
+    <link>http://localhost:60371/tags/%E6%97%A5%E5%B8%B8/</link>
     <description>Recent content in 日常 on </description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
     <lastBuildDate>Tue, 31 Mar 2026 23:13:44 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:60371/tags/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/posts/3/</link>
+      <link>http://localhost:60371/posts/3/</link>
       <pubDate>Tue, 31 Mar 2026 23:13:44 +0800</pubDate>
-      <guid>http://localhost:1313/posts/3/</guid>
+      <guid>http://localhost:60371/posts/3/</guid>
       <description>&lt;p&gt;测试视频&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/posts/2/</link>
+      <link>http://localhost:60371/posts/2/</link>
       <pubDate>Tue, 31 Mar 2026 22:26:34 +0800</pubDate>
-      <guid>http://localhost:1313/posts/2/</guid>
+      <guid>http://localhost:60371/posts/2/</guid>
       <description>&lt;p&gt;测试Qexo&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:1313/posts/1/</link>
+      <link>http://localhost:60371/posts/1/</link>
       <pubDate>Tue, 31 Mar 2026 21:30:44 +0800</pubDate>
-      <guid>http://localhost:1313/posts/1/</guid>
+      <guid>http://localhost:60371/posts/1/</guid>
       <description>&lt;p&gt;测试Memos说说&lt;/p&gt;</description>
     </item>
   </channel>

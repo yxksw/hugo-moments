@@ -218,24 +218,31 @@
                     </div>
 
                     {{ if $page.Site.Params.experimental.comment }}
+                    {{ $gitalk := $page.Site.Params.gitalk }}
                     <div id="row-comment-{{ $index }}" style="display: none;">
                         <div id="gitalk-container-{{ $index }}"></div>
                     </div>
                     <script type="text/javascript">
-                        var gitalk = new Gitalk({
-                            clientID: 'Ov23liiilSoYdEjrWNYd',
-                            clientSecret: 'd952f7aff9e5dc53ca6ce60dd806c2020ab8d5df',
-                            repo: 'Giscus',
-                            owner: 'yxksw',
-                            admin: ['yxksw'],
-                            id: '{{ $page.File }}',      // Ensure uniqueness and length less than 50
-                            distractionFreeMode: false  // Facebook-like distraction free mode
-                        })
+                        (function() {
+                            // Check current theme
+                            var isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark';
+                            
+                            var gitalk = new Gitalk({
+                                clientID: '{{ $gitalk.clientID }}',
+                                clientSecret: '{{ getenv "GITALK_CLIENT_SECRET" }}',
+                                repo: '{{ $gitalk.repo }}',
+                                owner: '{{ $gitalk.owner }}',
+                                admin: {{ $gitalk.admin | jsonify }},
+                                id: '{{ $page.File }}',      // Ensure uniqueness and length less than 50
+                                distractionFreeMode: false,  // Facebook-like distraction free mode
+                                theme: isDarkTheme ? 'dark' : 'light'
+                            })
 
-                        $("#comment-btn-{{ $index }}").on('click', function(){
-                            $("#row-comment-{{ $index }}").slideToggle("slow");
-                            gitalk.render('gitalk-container-{{ $index }}')
-                        });
+                            $("#comment-btn-{{ $index }}").on('click', function(){
+                                $("#row-comment-{{ $index }}").slideToggle("slow");
+                                gitalk.render('gitalk-container-{{ $index }}')
+                            });
+                        })();
                     </script>
                     {{ end }}
                 </div>

@@ -5,6 +5,13 @@ pagination:
     path: .
     pagerSize: 10
 
+security:
+    funcs:
+        getenv:
+            - '^HUGO_'
+            - '^CI$'
+            - '^GITALK_'
+
 params:
     title: "YXK Moments"
     signature: "每一段旅行，都有终点。"
@@ -15,3 +22,9 @@ params:
 
     experimental:
         comment: true
+
+    gitalk:
+        clientID: "Ov23liiilSoYdEjrWNYd"
+        repo: "Giscus"
+        owner: "yxksw"
+        admin: ["yxksw"]
