@@ -1,0 +1,9 @@
+{
+  "name": "hugo-memos-likes-api",
+  "version": "1.0.0",
+  "description": "Like system API for Hugo Memos blog using Neon PostgreSQL",
+  "main": "index.js",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  }
+}

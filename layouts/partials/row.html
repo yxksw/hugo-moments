@@ -213,7 +213,7 @@
                         <p class="note"><span class="note-time">{{ $page.Date.Format "15:04" }}</span><span class="note-context">{{ $page.Params.note }}</span></p>
                         <div class="buttons" style="display: flex;">
                             {{ if $page.Site.Params.experimental.comment }}<div class="comment-btn" id="comment-btn-{{ $index }}"><i class="far fa-comment"></i></div>{{ end }}
-                            <div class="like-btn"><i class="far fa-heart"></i></div>
+                            <div class="like-btn" data-post-id="{{ $page.File.UniqueID }}"><i class="far fa-heart"></i><span class="like-count"></span></div>
                         </div>
                     </div>
 

@@ -305,7 +305,7 @@
                         <p class="note"><span class="note-time">20:57</span><span class="note-context"></span></p>
                         <div class="buttons" style="display: flex;">
                             <div class="comment-btn" id="comment-btn-0"><i class="far fa-comment"></i></div>
-                            <div class="like-btn"><i class="far fa-heart"></i></div>
+                            <div class="like-btn" data-post-id="bafe1d10d260039116459e3982f56f07"><i class="far fa-heart"></i><span class="like-count"></span></div>
                         </div>
                     </div>
 
@@ -503,7 +503,7 @@
                         <p class="note"><span class="note-time">21:30</span><span class="note-context"></span></p>
                         <div class="buttons" style="display: flex;">
                             <div class="comment-btn" id="comment-btn-1"><i class="far fa-comment"></i></div>
-                            <div class="like-btn"><i class="far fa-heart"></i></div>
+                            <div class="like-btn" data-post-id="f991457469b1a40f511b0bcac7ac654d"><i class="far fa-heart"></i><span class="like-count"></span></div>
                         </div>
                     </div>
 
@@ -746,17 +746,7 @@ document.addEventListener('keydown', function(e) {
 </script>
 
         
-<script>
-    $(".fa-heart").click(function(){
-        if ($(this).attr("red") == 'true'){
-            $(this).animate({color:"#808080"});
-            $(this).attr("red", false);
-        } else {
-            $(this).animate({color:"#ff0000"});
-            $(this).attr("red", true);
-        }
-    });
-</script>
+<script src="/scripts/likes.js"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
