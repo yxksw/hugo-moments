@@ -5,7 +5,7 @@ import { handleCors, createResponse } from './_utils/cors.js';
 const generateUserId = (req) => {
   const ip = req.headers.get('x-forwarded-for') || 'unknown';
   const ua = req.headers.get('user-agent') || 'unknown';
-  return btoa(`${ip}:${ua}`).slice(0, 32);
+  return Buffer.from(`${ip}:${ua}`).toString('base64').slice(0, 32);
 };
 
 // Get like status for multiple posts (batch request)
@@ -28,42 +28,38 @@ export default async function handler(req) {
       return createResponse({ error: 'At least one postId is required' }, 400);
     }
 
-    // Limit batch size to prevent abuse
+    // Limit batch size
     if (postIds.length > 100) {
       return createResponse({ error: 'Maximum 100 postIds allowed per request' }, 400);
     }
 
-    const sql = getDb();
+    const db = await getDb();
     const userId = generateUserId(req);
+    const likesCollection = db.collection('likes');
+    const statsCollection = db.collection('post_stats');
 
-    // Get user's like status for all requested posts
-    const userLikes = await sql`
-      SELECT post_id, is_liked 
-      FROM likes 
-      WHERE post_id IN (${postIds}) 
-      AND user_id = ${userId}
-    `;
+    // Get user's likes for all posts
+    const userLikes = await likesCollection.find({
+      post_id: { $in: postIds },
+      user_id: userId,
+    }).toArray();
 
-    // Create a map of postId -> isLiked
     const userLikeMap = {};
     userLikes.forEach(like => {
       userLikeMap[like.post_id] = like.is_liked;
     });
 
-    // Get like counts for all posts
-    const likeCounts = await sql`
-      SELECT post_id, like_count 
-      FROM post_stats 
-      WHERE post_id IN (${postIds})
-    `;
+    // Get like counts
+    const stats = await statsCollection.find({
+      post_id: { $in: postIds },
+    }).toArray();
 
-    // Create a map of postId -> likeCount
     const countMap = {};
-    likeCounts.forEach(stat => {
+    stats.forEach(stat => {
       countMap[stat.post_id] = stat.like_count;
     });
 
-    // Build response for all requested posts
+    // Build response
     const results = postIds.map(postId => ({
       postId,
       isLiked: userLikeMap[postId] || false,

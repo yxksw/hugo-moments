@@ -1,23 +1,23 @@
 import { testConnection, initDb } from './_utils/db.js';
 import { handleCors, createResponse } from './_utils/cors.js';
 
-// Initialize database tables
+// Initialize database collections
 export default async function handler(req) {
   // Handle CORS
   const corsResponse = handleCors(req);
   if (corsResponse) return corsResponse;
 
   try {
-    // Allow POST and GET requests for initialization
+    // Allow POST and GET requests
     if (req.method !== 'POST' && req.method !== 'GET') {
       return createResponse({ error: 'Method not allowed' }, 405);
     }
 
-    // Check if DATABASE_URL is set
-    if (!process.env.DATABASE_URL) {
+    // Check if MONGODB_URI is set
+    if (!process.env.MONGODB_URI) {
       return createResponse({ 
-        error: 'DATABASE_URL environment variable is not set',
-        hint: 'Please set the DATABASE_URL environment variable in Vercel project settings'
+        error: 'MONGODB_URI environment variable is not set',
+        hint: 'Please set the MONGODB_URI environment variable in Vercel project settings'
       }, 500);
     }
 
@@ -29,11 +29,11 @@ export default async function handler(req) {
       return createResponse({ 
         error: 'Database connection failed',
         message: connError.message,
-        hint: 'Please check your DATABASE_URL and ensure the database is accessible from Vercel'
+        hint: 'Please check your MONGODB_URI and ensure the database is accessible from Vercel'
       }, 500);
     }
 
-    // Initialize database tables
+    // Initialize database
     await initDb();
 
     return createResponse({
@@ -47,7 +47,7 @@ export default async function handler(req) {
     return createResponse({ 
       error: 'Failed to initialize database',
       message: error.message,
-      hint: 'Please check your DATABASE_URL and ensure the database is accessible'
+      hint: 'Please check your MONGODB_URI and ensure the database is accessible'
     }, 500);
   }
 }

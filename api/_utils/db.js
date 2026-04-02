@@ -1,57 +1,64 @@
-import { neon, neonConfig } from '@neondatabase/serverless';
+import { MongoClient } from 'mongodb';
 
-// Configure neon for serverless environment
-neonConfig.fetchConnectionCache = true;
+const uri = process.env.MONGODB_URI;
+const dbName = process.env.MONGODB_DB_NAME || 'hugo_memos';
 
-// Initialize Neon database connection
-export const getDb = () => {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL environment variable is not set');
+let cachedClient = null;
+let cachedDb = null;
+
+// Connect to MongoDB
+export async function connectToDatabase() {
+  if (cachedClient && cachedDb) {
+    return { client: cachedClient, db: cachedDb };
   }
-  return neon(process.env.DATABASE_URL);
-};
+
+  if (!uri) {
+    throw new Error('MONGODB_URI environment variable is not set');
+  }
+
+  const client = new MongoClient(uri, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 5000,
+  });
+
+  await client.connect();
+  const db = client.db(dbName);
+
+  cachedClient = client;
+  cachedDb = db;
+
+  return { client, db };
+}
+
+// Get database instance
+export async function getDb() {
+  const { db } = await connectToDatabase();
+  return db;
+}
 
 // Test database connection
-export const testConnection = async () => {
-  const sql = getDb();
-  const result = await sql`SELECT NOW() as now`;
-  return result[0].now;
-};
+export async function testConnection() {
+  const { db } = await connectToDatabase();
+  const result = await db.admin().ping();
+  return result;
+}
 
-// Initialize database tables
-export const initDb = async () => {
-  const sql = getDb();
+// Initialize database collections and indexes
+export async function initDb() {
+  const { db } = await connectToDatabase();
 
-  // Create likes table
-  await sql`
-    CREATE TABLE IF NOT EXISTS likes (
-      id SERIAL PRIMARY KEY,
-      post_id VARCHAR(255) NOT NULL,
-      user_id VARCHAR(255) NOT NULL,
-      is_liked BOOLEAN DEFAULT TRUE,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(post_id, user_id)
-    )
-  `;
+  // Create likes collection
+  const likesCollection = db.collection('likes');
 
-  // Create index for faster queries
-  await sql`
-    CREATE INDEX IF NOT EXISTS idx_likes_post_id ON likes(post_id)
-  `;
+  // Create indexes
+  await likesCollection.createIndex({ post_id: 1, user_id: 1 }, { unique: true });
+  await likesCollection.createIndex({ post_id: 1 });
+  await likesCollection.createIndex({ user_id: 1 });
 
-  await sql`
-    CREATE INDEX IF NOT EXISTS idx_likes_user_id ON likes(user_id)
-  `;
+  // Create post_stats collection
+  const statsCollection = db.collection('post_stats');
+  await statsCollection.createIndex({ post_id: 1 }, { unique: true });
 
-  // Create post_stats table for caching like counts
-  await sql`
-    CREATE TABLE IF NOT EXISTS post_stats (
-      post_id VARCHAR(255) PRIMARY KEY,
-      like_count INTEGER DEFAULT 0,
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-    )
-  `;
-
-  return sql;
-};
+  return db;
+}

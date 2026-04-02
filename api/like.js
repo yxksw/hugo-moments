@@ -1,14 +1,11 @@
 import { getDb } from './_utils/db.js';
 import { handleCors, createResponse } from './_utils/cors.js';
 
-// Generate a unique user ID from IP and user agent (for anonymous users)
+// Generate a unique user ID from IP and user agent
 const generateUserId = (req) => {
-  // In production, you might want to use a more sophisticated method
-  // or require users to be logged in
   const ip = req.headers.get('x-forwarded-for') || 'unknown';
   const ua = req.headers.get('user-agent') || 'unknown';
-  // Simple hash - in production use a proper hashing function
-  return btoa(`${ip}:${ua}`).slice(0, 32);
+  return Buffer.from(`${ip}:${ua}`).toString('base64').slice(0, 32);
 };
 
 // Toggle like status for a post
@@ -25,57 +22,44 @@ export default async function handler(req) {
       return createResponse({ error: 'postId is required' }, 400);
     }
 
-    const sql = getDb();
+    const db = await getDb();
     const userId = generateUserId(req);
+    const likesCollection = db.collection('likes');
+    const statsCollection = db.collection('post_stats');
 
-    // Check if user has already liked this post
-    const existingLike = await sql`
-      SELECT id, is_liked FROM likes 
-      WHERE post_id = ${postId} AND user_id = ${userId}
-      FOR UPDATE
-    `;
+    // Find existing like
+    const existingLike = await likesCollection.findOne({ post_id: postId, user_id: userId });
 
     let isLiked;
-    let likeCount;
 
-    if (existingLike.length > 0) {
+    if (existingLike) {
       // Toggle like status
-      isLiked = !existingLike[0].is_liked;
-      
-      await sql`
-        UPDATE likes 
-        SET is_liked = ${isLiked}, 
-            updated_at = CURRENT_TIMESTAMP 
-        WHERE id = ${existingLike[0].id}
-      `;
+      isLiked = !existingLike.is_liked;
+      await likesCollection.updateOne(
+        { _id: existingLike._id },
+        { $set: { is_liked: isLiked, updated_at: new Date() } }
+      );
     } else {
       // Create new like
       isLiked = true;
-      
-      await sql`
-        INSERT INTO likes (post_id, user_id, is_liked)
-        VALUES (${postId}, ${userId}, ${isLiked})
-      `;
+      await likesCollection.insertOne({
+        post_id: postId,
+        user_id: userId,
+        is_liked: isLiked,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
     }
 
-    // Update like count in post_stats
-    const countResult = await sql`
-      SELECT COUNT(*) as count 
-      FROM likes 
-      WHERE post_id = ${postId} AND is_liked = TRUE
-    `;
-    
-    likeCount = parseInt(countResult[0].count);
+    // Update like count
+    const likeCount = await likesCollection.countDocuments({ post_id: postId, is_liked: true });
 
-    // Upsert post_stats
-    await sql`
-      INSERT INTO post_stats (post_id, like_count, updated_at)
-      VALUES (${postId}, ${likeCount}, CURRENT_TIMESTAMP)
-      ON CONFLICT (post_id) 
-      DO UPDATE SET 
-        like_count = ${likeCount},
-        updated_at = CURRENT_TIMESTAMP
-    `;
+    // Update post_stats
+    await statsCollection.updateOne(
+      { post_id: postId },
+      { $set: { like_count: likeCount, updated_at: new Date() } },
+      { upsert: true }
+    );
 
     return createResponse({
       success: true,

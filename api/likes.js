@@ -5,7 +5,7 @@ import { handleCors, createResponse } from './_utils/cors.js';
 const generateUserId = (req) => {
   const ip = req.headers.get('x-forwarded-for') || 'unknown';
   const ua = req.headers.get('user-agent') || 'unknown';
-  return btoa(`${ip}:${ua}`).slice(0, 32);
+  return Buffer.from(`${ip}:${ua}`).toString('base64').slice(0, 32);
 };
 
 // Get like status and count for a post
@@ -22,34 +22,23 @@ export default async function handler(req) {
       return createResponse({ error: 'postId is required' }, 400);
     }
 
-    const sql = getDb();
+    const db = await getDb();
     const userId = generateUserId(req);
+    const likesCollection = db.collection('likes');
+    const statsCollection = db.collection('post_stats');
 
-    // Get user's like status for this post
-    const userLike = await sql`
-      SELECT is_liked FROM likes 
-      WHERE post_id = ${postId} AND user_id = ${userId}
-    `;
+    // Get user's like status
+    const userLike = await likesCollection.findOne({ post_id: postId, user_id: userId });
+    const isLiked = userLike ? userLike.is_liked : false;
 
-    const isLiked = userLike.length > 0 ? userLike[0].is_liked : false;
-
-    // Get total like count from cache or calculate
+    // Get like count from stats or calculate
     let likeCount = 0;
-    const statsResult = await sql`
-      SELECT like_count FROM post_stats 
-      WHERE post_id = ${postId}
-    `;
-
-    if (statsResult.length > 0) {
-      likeCount = statsResult[0].like_count;
+    const stats = await statsCollection.findOne({ post_id: postId });
+    
+    if (stats) {
+      likeCount = stats.like_count;
     } else {
-      // Calculate if not cached
-      const countResult = await sql`
-        SELECT COUNT(*) as count 
-        FROM likes 
-        WHERE post_id = ${postId} AND is_liked = TRUE
-      `;
-      likeCount = parseInt(countResult[0].count);
+      likeCount = await likesCollection.countDocuments({ post_id: postId, is_liked: true });
     }
 
     return createResponse({
