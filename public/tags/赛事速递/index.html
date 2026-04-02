@@ -42,7 +42,7 @@
 
 
 
-<link rel="stylesheet" href="/friends-modal.min.9ebb34352fda79afcd4a063a6f795ebb5fbe00c9ced00997609ced5741af2728.css">
+<link rel="stylesheet" href="/friends-modal.min.2d342ac3f8ea851dbe3090d6b138995f998ea7d0744bf559204acf67eca74b7f.css">
 
 
 <link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/@fancyapps/ui/dist/fancybox.css"/>
@@ -236,6 +236,9 @@
                                         
                                             
                                             
+                                        
+                                            
+                                            
                                                 
                                                 
                                             
@@ -312,7 +315,7 @@
 
                     
                     <div id="zan-0" class="zan clearfix" data-index="0">
-                        <div class="heart" onclick="goodplus('\/posts\/4\/',  0 )"></div>
+                        <div class="heart" onclick="goodplus('\/posts\/2\/',  0 )"></div>
                         <br>
                         <div class="zan_text" data-index="0"></div>
                     </div>
@@ -333,14 +336,19 @@
                                 repo: 'Giscus',
                                 owner: 'yxksw',
                                 admin: "[\"yxksw\"]",
-                                id: '4',      
-                                distractionFreeMode: false,  
+                                id: '2',
+                                distractionFreeMode: false,
                                 theme: isDarkTheme ? 'dark' : 'light'
-                            })
+                            });
 
-                            $("#comment-btn-0").on('click', function(){
-                                $("#row-comment-0").slideToggle("slow");
-                                gitalk.render('gitalk-container-0')
+                            document.getElementById('comment-btn-0').addEventListener('click', function(){
+                                var commentDiv = document.getElementById('row-comment-0');
+                                if (commentDiv.style.display === 'none') {
+                                    commentDiv.style.display = 'block';
+                                } else {
+                                    commentDiv.style.display = 'none';
+                                }
+                                gitalk.render('gitalk-container-0');
                             });
                         })();
                     </script>
@@ -500,6 +508,21 @@ const liuMusic = {
         <div class="friends-section">
             <div id="qexo-friends"></div>
         </div>
+
+        
+        <div class="friends-cache-notice">
+            <span class="cache-icon">💾</span>
+            <span class="cache-text">数据已缓存，1小时内自动更新</span>
+            <button class="cache-refresh-btn" onclick="refreshFriendsData()" title="强制刷新">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                    <path d="M16 21h5v-5"/>
+                </svg>
+                刷新
+            </button>
+        </div>
     </div>
 </div>
 
@@ -508,51 +531,246 @@ const liuMusic = {
 
 <script>
 
-function openFriendsModal() {
-    const modal = document.getElementById('friends-modal');
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
+(function() {
     
-    if (!window.qexoFriendsLoaded) {
-        loadQexoFriendsLib();
+    const CACHE_KEY = 'qexo_friends_data';
+    const CACHE_TIME_KEY = 'qexo_friends_time';
+    const CACHE_DURATION = 60 * 60 * 1000; 
+    const QEXO_API_URL = 'https://qexo.314926.xyz';
+    
+    
+    const isForceRefresh = sessionStorage.getItem('friends_force_refresh') === 'true';
+    
+    
+    if (isForceRefresh) {
+        sessionStorage.removeItem('friends_force_refresh');
     }
-}
-
-function closeFriendsModal() {
-    const modal = document.getElementById('friends-modal');
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-function loadQexoFriendsLib() {
     
-    const script = document.createElement('script');
-    script.src = 'https://registry.npmmirror.com/qexo-static/1.6.0/files/hexo/friends.js';
-    script.onload = function() {
-        window.qexoFriendsLoaded = true;
+    
+    function renderFriends(data) {
+        const container = document.getElementById('qexo-friends');
+        if (!container || !data) return;
         
-        if (typeof loadQexoFriends === 'function') {
-            loadQexoFriends("qexo-friends", "https://qexo.314926.xyz");
+        
+        if (Array.isArray(data)) {
+            container.innerHTML = data.map(friend => `
+                <a href="${friend.url}" target="_blank" class="friend-card" title="${friend.description || ''}">
+                    <img src="${friend.image || ''}" alt="${friend.name}" class="friend-avatar">
+                    <div class="friend-info">
+                        <div class="friend-name">${friend.name}</div>
+                        <div class="friend-desc">${friend.description || ''}</div>
+                    </div>
+                </a>
+            `).join('');
+        } else if (typeof data === 'string') {
+            
+            container.innerHTML = data;
+        }
+    }
+    
+    
+    function getCachedData() {
+        try {
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+            const now = Date.now();
+            
+            
+            if (isForceRefresh) {
+                console.log('[Friends] Force refresh, skipping cache');
+                return null;
+            }
+            
+            
+            if (cachedData && cachedTime) {
+                const age = now - parseInt(cachedTime);
+                if (age < CACHE_DURATION) {
+                    console.log('[Friends] Using cached data, age:', Math.round(age / 1000), 'seconds');
+                    return JSON.parse(cachedData);
+                } else {
+                    console.log('[Friends] Cache expired, age:', Math.round(age / 1000), 'seconds');
+                }
+            }
+        } catch (e) {
+            console.error('[Friends] Error reading cache:', e);
+        }
+        return null;
+    }
+    
+    
+    function setCachedData(data) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            console.log('[Friends] Data cached successfully');
+        } catch (e) {
+            console.error('[Friends] Error saving cache:', e);
+        }
+    }
+    
+    
+    function loadFriendsData() {
+        const container = document.getElementById('qexo-friends');
+        if (!container) return;
+        
+        
+        const cachedData = getCachedData();
+        if (cachedData) {
+            renderFriends(cachedData);
+            window.qexoFriendsLoaded = true;
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    function loadQexoFriendsLib() {
+        
+        if (window.qexoFriendsLibLoaded) {
+            
+            if (!loadFriendsData() || isForceRefresh) {
+                if (typeof loadQexoFriends === 'function') {
+                    loadQexoFriends("qexo-friends", QEXO_API_URL);
+                    observeFriendsLoad();
+                }
+            }
+            return;
+        }
+        
+        
+        const script = document.createElement('script');
+        script.src = 'https://registry.npmmirror.com/qexo-static/1.6.0/files/hexo/friends.js';
+        script.onload = function() {
+            window.qexoFriendsLibLoaded = true;
+            
+            if (typeof loadQexoFriends === 'function') {
+                
+                const cachedData = getCachedData();
+                if (cachedData && !isForceRefresh) {
+                    renderFriends(cachedData);
+                    window.qexoFriendsLoaded = true;
+                } else {
+                    
+                    loadQexoFriends("qexo-friends", QEXO_API_URL);
+                    
+                    observeFriendsLoad();
+                }
+            }
+        };
+        script.onerror = function() {
+            console.error('[Friends] Failed to load qexo friends library');
+            
+            const cachedData = getCachedData();
+            if (cachedData) {
+                renderFriends(cachedData);
+            }
+        };
+        document.head.appendChild(script);
+    }
+    
+    
+    function observeFriendsLoad() {
+        const container = document.getElementById('qexo-friends');
+        if (!container) return;
+        
+        let dataCached = false;
+        const observer = new MutationObserver(function(mutations) {
+            if (!dataCached && container.children.length > 0) {
+                
+                const friends = extractFriendsFromDOM(container);
+                if (friends.length > 0) {
+                    setCachedData(friends);
+                    dataCached = true;
+                    window.qexoFriendsLoaded = true;
+                }
+                observer.disconnect();
+            }
+        });
+        
+        observer.observe(container, { childList: true, subtree: true });
+        
+        
+        setTimeout(() => observer.disconnect(), 5000);
+    }
+    
+    
+    function extractFriendsFromDOM(container) {
+        const friends = [];
+        const cards = container.querySelectorAll('.friend-card, a[href]');
+        cards.forEach(card => {
+            const nameEl = card.querySelector('.friend-name') || card;
+            const descEl = card.querySelector('.friend-desc');
+            const imgEl = card.querySelector('.friend-avatar, img');
+            
+            friends.push({
+                name: nameEl.textContent?.trim() || '',
+                url: card.href || '',
+                description: descEl?.textContent?.trim() || '',
+                image: imgEl?.src || ''
+            });
+        });
+        return friends;
+    }
+    
+    
+    window.openFriendsModal = function() {
+        const modal = document.getElementById('friends-modal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        
+        if (!window.qexoFriendsLoaded) {
+            loadQexoFriendsLib();
         }
     };
-    document.head.appendChild(script);
-}
-
-
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('friends-modal');
-    if (e.target === modal) {
-        closeFriendsModal();
+    
+    window.closeFriendsModal = function() {
+        const modal = document.getElementById('friends-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+    
+    
+    window.refreshFriendsData = function() {
+        localStorage.removeItem(CACHE_KEY);
+        localStorage.removeItem(CACHE_TIME_KEY);
+        window.qexoFriendsLoaded = false;
+        loadQexoFriendsLib();
+        console.log('[Friends] Data refreshed');
+    };
+    
+    
+    window.addEventListener('beforeunload', function() {
+        
+        
+        
+    });
+    
+    
+    if (window.performance && window.performance.navigation) {
+        
+        if (window.performance.navigation.type === 1) {
+            
+            sessionStorage.setItem('friends_force_refresh', 'true');
+        }
     }
-});
-
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeFriendsModal();
-    }
-});
+    
+    
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('friends-modal');
+        if (e.target === modal) {
+            window.closeFriendsModal();
+        }
+    });
+    
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            window.closeFriendsModal();
+        }
+    });
+})();
 </script>
 
         

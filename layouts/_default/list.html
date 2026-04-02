@@ -1,6 +1,8 @@
 {{ define "main" }}
     <div class="container">
-        {{ $paginator := .Paginate ((where $.Site.RegularPages "Section" .Section).ByParam "top") }}
+        {{ $pages := where $.Site.RegularPages "Section" .Section }}
+        {{ $sorted := sort $pages "Date" "desc" }}
+        {{ $paginator := .Paginate $sorted }}
         {{ range $i, $page := $paginator.Pages }}
             {{ partial "row.html" (dict "page" $page "index" $i) }}
         {{ end }}
@@ -9,6 +11,8 @@
 
 
 {{ define "pagination" }}
-    {{ $paginator := .Paginate ((where $.Site.RegularPages "Section" .Section).ByParam "top") }}
+    {{ $pages := where $.Site.RegularPages "Section" .Section }}
+    {{ $sorted := sort $pages "Date" "desc" }}
+    {{ $paginator := .Paginate $sorted }}
     {{ partial "pagination.html" (dict "paginator" $paginator) }}
 {{ end }}
