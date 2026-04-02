@@ -213,8 +213,14 @@
                         <p class="note"><span class="note-time">{{ $page.Date.Format "15:04" }}</span><span class="note-context">{{ $page.Params.note }}</span></p>
                         <div class="buttons" style="display: flex;">
                             {{ if $page.Site.Params.experimental.comment }}<div class="comment-btn" id="comment-btn-{{ $index }}"><i class="far fa-comment"></i></div>{{ end }}
-                            <div class="like-btn"><i class="far fa-heart"></i></div>
                         </div>
+                    </div>
+
+                    {{/* Blog-Like 点赞组件 */}}
+                    <div id="zan-{{ $index }}" class="zan clearfix" data-index="{{ $index }}">
+                        <div class="heart" onclick="goodplus('{{ $page.RelPermalink }}', {{ $index }})"></div>
+                        <br>
+                        <div class="zan_text" data-index="{{ $index }}"></div>
                     </div>
 
                     {{ if $page.Site.Params.experimental.comment }}
@@ -233,14 +239,19 @@
                                 repo: '{{ $gitalk.repo }}',
                                 owner: '{{ $gitalk.owner }}',
                                 admin: {{ $gitalk.admin | jsonify }},
-                                id: '{{ $page.File }}',      // Ensure uniqueness and length less than 50
-                                distractionFreeMode: false,  // Facebook-like distraction free mode
+                                id: '{{ $page.File }}',
+                                distractionFreeMode: false,
                                 theme: isDarkTheme ? 'dark' : 'light'
-                            })
+                            });
 
-                            $("#comment-btn-{{ $index }}").on('click', function(){
-                                $("#row-comment-{{ $index }}").slideToggle("slow");
-                                gitalk.render('gitalk-container-{{ $index }}')
+                            document.getElementById('comment-btn-{{ $index }}').addEventListener('click', function(){
+                                var commentDiv = document.getElementById('row-comment-{{ $index }}');
+                                if (commentDiv.style.display === 'none') {
+                                    commentDiv.style.display = 'block';
+                                } else {
+                                    commentDiv.style.display = 'none';
+                                }
+                                gitalk.render('gitalk-container-{{ $index }}');
                             });
                         })();
                     </script>

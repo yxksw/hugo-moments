@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=49993&amp;path=livereload" data-no-instant defer></script>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
         <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
 
 <link href="https://cdn.bootcss.com/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js"></script>
 
 
 <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
@@ -45,15 +45,15 @@
 <link rel="stylesheet" href="/friends-modal.min.9ebb34352fda79afcd4a063a6f795ebb5fbe00c9ced00997609ced5741af2728.css">
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"/>
+<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/@fancyapps/ui/dist/fancybox.css"/>
 
 
 <link href="https://cdn.staticfile.net/video.js/8.6.1/alt/video-js-cdn.min.css" rel="stylesheet" />
 
 
-<link href="https://cdn.jsdelivr.net/npm/purecss@2.0.6/build/base-min.min.css" type="text/css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/purecss@2.0.6/build/grids-min.min.css" type="text/css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/purecss@2.0.6/build/grids-responsive-min.min.css" type="text/css" rel="stylesheet" />
+<link href="https://cdn.jsdmirror.com/npm/purecss@2.0.6/build/base-min.min.css" type="text/css" rel="stylesheet" />
+<link href="https://cdn.jsdmirror.com/npm/purecss@2.0.6/build/grids-min.min.css" type="text/css" rel="stylesheet" />
+<link href="https://cdn.jsdmirror.com/npm/purecss@2.0.6/build/grids-responsive-min.min.css" type="text/css" rel="stylesheet" />
 
 
 
@@ -62,8 +62,8 @@
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/gitalk/dist/gitalk.css">
+<script src="https://cdn.jsdmirror.com/npm/gitalk/dist/gitalk.min.js"></script>
 
 
 
@@ -71,6 +71,8 @@
 
 
 <script src="/scripts/audio-play.js"></script>
+
+<link rel="stylesheet" href="/styles/zan.css">
 
 
 <title>YXK Moments</title>
@@ -94,7 +96,7 @@
     </button>
     <div class="container">
         <div class="site-title">
-            <a href="http://localhost:49993/">YXK Moments</a>
+            <a href="http://localhost:1313/">YXK Moments</a>
         </div>
         <p class="signature">每一段旅行，都有终点。</p>
     </div>
@@ -305,8 +307,14 @@
                         <p class="note"><span class="note-time">20:57</span><span class="note-context"></span></p>
                         <div class="buttons" style="display: flex;">
                             <div class="comment-btn" id="comment-btn-0"><i class="far fa-comment"></i></div>
-                            <div class="like-btn"><i class="far fa-heart"></i></div>
                         </div>
+                    </div>
+
+                    
+                    <div id="zan-0" class="zan clearfix" data-index="0">
+                        <div class="heart" onclick="goodplus('\/posts\/4\/',  0 )"></div>
+                        <br>
+                        <div class="zan_text" data-index="0"></div>
                     </div>
 
                     
@@ -321,7 +329,7 @@
                             
                             var gitalk = new Gitalk({
                                 clientID: 'Ov23liiilSoYdEjrWNYd',
-                                clientSecret: 'bdc91743ea5474694ecd3b03051f09ab2e778660',
+                                clientSecret: '',
                                 repo: 'Giscus',
                                 owner: 'yxksw',
                                 admin: "[\"yxksw\"]",
@@ -402,13 +410,13 @@ Powered by <a href="https://www.hugo.io">Hugo</a> | Theme <a href="https://githu
 </div>
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/aplayer/dist/APlayer.min.css">
 
 
-<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/aplayer/dist/APlayer.min.js"></script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
 
 <script>
@@ -525,7 +533,7 @@ function loadQexoFriendsLib() {
         window.qexoFriendsLoaded = true;
         
         if (typeof loadQexoFriends === 'function') {
-            loadQexoFriends("qexo-friends", "https://qexo.050815.xyz");
+            loadQexoFriends("qexo-friends", "https://qexo.314926.xyz");
         }
     };
     document.head.appendChild(script);
@@ -548,20 +556,10 @@ document.addEventListener('keydown', function(e) {
 </script>
 
         
-<script>
-    $(".fa-heart").click(function(){
-        if ($(this).attr("red") == 'true'){
-            $(this).animate({color:"#808080"});
-            $(this).attr("red", false);
-        } else {
-            $(this).animate({color:"#ff0000"});
-            $(this).attr("red", true);
-        }
-    });
-</script>
+<script src="/scripts/zan.js"></script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 
 
 
@@ -578,18 +576,20 @@ document.addEventListener('keydown', function(e) {
 
 <button id="back-top-button"><i class="fas fa-chevron-up"></i></button>
 <script>
+    var backTopButton = document.getElementById("back-top-button");
+    backTopButton.style.display = "none";
+
     window.onscroll = function() {scrollFunction()};
     function scrollFunction() {
         if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
-            $("#back-top-button").fadeIn();
+            backTopButton.style.display = "block";
         } else {
-            $("#back-top-button").fadeOut();
+            backTopButton.style.display = "none";
         }
     }
 
-
-    $( "#back-top-button" ).click(function() {
-        $("html, body").animate({scrollTop: 0}, 500);
+    backTopButton.addEventListener('click', function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
     });
 </script>
 

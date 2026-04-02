@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on </title>
-    <link>http://localhost:49993/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on </description>
     <generator>Hugo</generator>
     <language>zh-Hans</language>
     <lastBuildDate>Wed, 01 Apr 2026 20:57:30 +0800</lastBuildDate>
-    <atom:link href="http://localhost:49993/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:49993/posts/4/</link>
+      <link>http://localhost:1313/posts/4/</link>
       <pubDate>Wed, 01 Apr 2026 20:57:30 +0800</pubDate>
-      <guid>http://localhost:49993/posts/4/</guid>
+      <guid>http://localhost:1313/posts/4/</guid>
       <description>&lt;p&gt;T1 0:2 KT，低迷啊，飞哥～&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>http://localhost:49993/posts/1/</link>
+      <link>http://localhost:1313/posts/1/</link>
       <pubDate>Tue, 31 Mar 2026 21:30:44 +0800</pubDate>
-      <guid>http://localhost:49993/posts/1/</guid>
+      <guid>http://localhost:1313/posts/1/</guid>
       <description>&lt;p&gt;测试Memos说说&lt;/p&gt;</description>
     </item>
   </channel>

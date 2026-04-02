@@ -545,6 +545,82 @@
 }
 
 // ========================================
+// 缓存说明样式
+// ========================================
+.friends-cache-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    background-color: var(--primary-background, #F7F7F7);
+    border-radius: 8px;
+    border: 1px solid var(--line, rgba(243, 244, 246, 1));
+    font-size: 12px;
+    color: var(--text-sub-color, #555555);
+    flex-shrink: 0;
+
+    .cache-icon {
+        font-size: 14px;
+    }
+
+    .cache-text {
+        flex: 1;
+        text-align: center;
+    }
+
+    .cache-refresh-btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background: transparent;
+        border: 1px solid var(--line, rgba(243, 244, 246, 1));
+        border-radius: 4px;
+        font-size: 11px;
+        color: var(--text-sub-color, #555555);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        &:hover {
+            background-color: var(--primary-background-hover, #DEDEDE);
+            border-color: var(--text-sub-color, #555555);
+            color: var(--text-color, #333333);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+}
+
+// 深色模式下的缓存说明
+[data-theme="dark"] {
+    .friends-cache-notice {
+        background-color: #3a3a3a !important;
+        border-color: #4a4a4a !important;
+        color: #cccccc !important;
+
+        .cache-refresh-btn {
+            border-color: #4a4a4a !important;
+            color: #cccccc !important;
+
+            &:hover {
+                background-color: #4a4a4a !important;
+                border-color: #909090 !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+}
+
+// ========================================
 // 适配 Qexo Friends 默认样式覆盖
 // ========================================
 .qexo-friends-container {

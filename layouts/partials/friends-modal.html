@@ -16,6 +16,21 @@
         <div class="friends-section">
             <div id="qexo-friends"></div>
         </div>
+
+        <!-- 缓存说明 -->
+        <div class="friends-cache-notice">
+            <span class="cache-icon">💾</span>
+            <span class="cache-text">数据已缓存，1小时内自动更新</span>
+            <button class="cache-refresh-btn" onclick="refreshFriendsData()" title="强制刷新">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                    <path d="M16 21h5v-5"/>
+                </svg>
+                刷新
+            </button>
+        </div>
     </div>
 </div>
 
@@ -24,49 +39,244 @@
 
 <script>
 // Friends Modal Functions
-function openFriendsModal() {
-    const modal = document.getElementById('friends-modal');
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-
-    // Load Qexo friends if not already loaded
-    if (!window.qexoFriendsLoaded) {
-        loadQexoFriendsLib();
+(function() {
+    // 缓存配置
+    const CACHE_KEY = 'qexo_friends_data';
+    const CACHE_TIME_KEY = 'qexo_friends_time';
+    const CACHE_DURATION = 60 * 60 * 1000; // 1小时
+    const QEXO_API_URL = 'https://qexo.314926.xyz';
+    
+    // 检查是否是强制刷新（通过 sessionStorage 标记）
+    const isForceRefresh = sessionStorage.getItem('friends_force_refresh') === 'true';
+    
+    // 页面加载时清除强制刷新标记
+    if (isForceRefresh) {
+        sessionStorage.removeItem('friends_force_refresh');
     }
-}
-
-function closeFriendsModal() {
-    const modal = document.getElementById('friends-modal');
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-}
-
-function loadQexoFriendsLib() {
-    // Load Qexo friends script
-    const script = document.createElement('script');
-    script.src = 'https://registry.npmmirror.com/qexo-static/1.6.0/files/hexo/friends.js';
-    script.onload = function() {
-        window.qexoFriendsLoaded = true;
-        // Initialize Qexo friends
-        if (typeof loadQexoFriends === 'function') {
-            loadQexoFriends("qexo-friends", "https://qexo.050815.xyz");
+    
+    // 渲染友链数据到页面
+    function renderFriends(data) {
+        const container = document.getElementById('qexo-friends');
+        if (!container || !data) return;
+        
+        // 如果数据是数组，渲染为友链列表
+        if (Array.isArray(data)) {
+            container.innerHTML = data.map(friend => `
+                <a href="${friend.url}" target="_blank" class="friend-card" title="${friend.description || ''}">
+                    <img src="${friend.image || ''}" alt="${friend.name}" class="friend-avatar">
+                    <div class="friend-info">
+                        <div class="friend-name">${friend.name}</div>
+                        <div class="friend-desc">${friend.description || ''}</div>
+                    </div>
+                </a>
+            `).join('');
+        } else if (typeof data === 'string') {
+            // 如果返回的是 HTML 字符串
+            container.innerHTML = data;
+        }
+    }
+    
+    // 获取缓存数据
+    function getCachedData() {
+        try {
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+            const now = Date.now();
+            
+            // 强制刷新时不使用缓存
+            if (isForceRefresh) {
+                console.log('[Friends] Force refresh, skipping cache');
+                return null;
+            }
+            
+            // 检查缓存是否有效
+            if (cachedData && cachedTime) {
+                const age = now - parseInt(cachedTime);
+                if (age < CACHE_DURATION) {
+                    console.log('[Friends] Using cached data, age:', Math.round(age / 1000), 'seconds');
+                    return JSON.parse(cachedData);
+                } else {
+                    console.log('[Friends] Cache expired, age:', Math.round(age / 1000), 'seconds');
+                }
+            }
+        } catch (e) {
+            console.error('[Friends] Error reading cache:', e);
+        }
+        return null;
+    }
+    
+    // 保存数据到缓存
+    function setCachedData(data) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            console.log('[Friends] Data cached successfully');
+        } catch (e) {
+            console.error('[Friends] Error saving cache:', e);
+        }
+    }
+    
+    // 加载友链数据（优先使用缓存）
+    function loadFriendsData() {
+        const container = document.getElementById('qexo-friends');
+        if (!container) return;
+        
+        // 尝试使用缓存
+        const cachedData = getCachedData();
+        if (cachedData) {
+            renderFriends(cachedData);
+            window.qexoFriendsLoaded = true;
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // 加载 Qexo Friends 库（兼容原有逻辑）
+    function loadQexoFriendsLib() {
+        // 如果已经加载过，直接返回
+        if (window.qexoFriendsLibLoaded) {
+            // 尝试使用缓存，如果没有缓存则重新加载
+            if (!loadFriendsData() || isForceRefresh) {
+                if (typeof loadQexoFriends === 'function') {
+                    loadQexoFriends("qexo-friends", QEXO_API_URL);
+                    observeFriendsLoad();
+                }
+            }
+            return;
+        }
+        
+        // 加载 Qexo friends script
+        const script = document.createElement('script');
+        script.src = 'https://registry.npmmirror.com/qexo-static/1.6.0/files/hexo/friends.js';
+        script.onload = function() {
+            window.qexoFriendsLibLoaded = true;
+            // 如果 qexo 库加载成功，使用它的方法
+            if (typeof loadQexoFriends === 'function') {
+                // 尝试使用缓存
+                const cachedData = getCachedData();
+                if (cachedData && !isForceRefresh) {
+                    renderFriends(cachedData);
+                    window.qexoFriendsLoaded = true;
+                } else {
+                    // 使用 qexo 方法加载
+                    loadQexoFriends("qexo-friends", QEXO_API_URL);
+                    // 监听数据加载完成（通过 MutationObserver）
+                    observeFriendsLoad();
+                }
+            }
+        };
+        script.onerror = function() {
+            console.error('[Friends] Failed to load qexo friends library');
+            // 尝试使用缓存数据
+            const cachedData = getCachedData();
+            if (cachedData) {
+                renderFriends(cachedData);
+            }
+        };
+        document.head.appendChild(script);
+    }
+    
+    // 监听友链数据加载完成并缓存
+    function observeFriendsLoad() {
+        const container = document.getElementById('qexo-friends');
+        if (!container) return;
+        
+        let dataCached = false;
+        const observer = new MutationObserver(function(mutations) {
+            if (!dataCached && container.children.length > 0) {
+                // 提取数据并缓存
+                const friends = extractFriendsFromDOM(container);
+                if (friends.length > 0) {
+                    setCachedData(friends);
+                    dataCached = true;
+                    window.qexoFriendsLoaded = true;
+                }
+                observer.disconnect();
+            }
+        });
+        
+        observer.observe(container, { childList: true, subtree: true });
+        
+        // 5秒后自动断开观察
+        setTimeout(() => observer.disconnect(), 5000);
+    }
+    
+    // 从 DOM 提取友链数据
+    function extractFriendsFromDOM(container) {
+        const friends = [];
+        const cards = container.querySelectorAll('.friend-card, a[href]');
+        cards.forEach(card => {
+            const nameEl = card.querySelector('.friend-name') || card;
+            const descEl = card.querySelector('.friend-desc');
+            const imgEl = card.querySelector('.friend-avatar, img');
+            
+            friends.push({
+                name: nameEl.textContent?.trim() || '',
+                url: card.href || '',
+                description: descEl?.textContent?.trim() || '',
+                image: imgEl?.src || ''
+            });
+        });
+        return friends;
+    }
+    
+    // 暴露全局函数
+    window.openFriendsModal = function() {
+        const modal = document.getElementById('friends-modal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // 加载友链数据
+        if (!window.qexoFriendsLoaded) {
+            loadQexoFriendsLib();
         }
     };
-    document.head.appendChild(script);
-}
-
-// Close modal when clicking outside
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('friends-modal');
-    if (e.target === modal) {
-        closeFriendsModal();
+    
+    window.closeFriendsModal = function() {
+        const modal = document.getElementById('friends-modal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+    
+    // 强制刷新友链数据（可在控制台调用）
+    window.refreshFriendsData = function() {
+        localStorage.removeItem(CACHE_KEY);
+        localStorage.removeItem(CACHE_TIME_KEY);
+        window.qexoFriendsLoaded = false;
+        loadQexoFriendsLib();
+        console.log('[Friends] Data refreshed');
+    };
+    
+    // 检测强制刷新（通过 beforeunload 设置标记）
+    window.addEventListener('beforeunload', function() {
+        // 检测是否是强制刷新（Ctrl+F5 或 Cmd+Shift+R）
+        // 由于无法直接检测按键，我们使用一个技巧：
+        // 在页面加载时检查 navigation.type
+    });
+    
+    // 页面加载完成后检查是否是强制刷新
+    if (window.performance && window.performance.navigation) {
+        // 如果是强制刷新（type === 1 且 有缓存）
+        if (window.performance.navigation.type === 1) {
+            // 设置强制刷新标记
+            sessionStorage.setItem('friends_force_refresh', 'true');
+        }
     }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeFriendsModal();
-    }
-});
+    
+    // 点击外部关闭弹窗
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('friends-modal');
+        if (e.target === modal) {
+            window.closeFriendsModal();
+        }
+    });
+    
+    // ESC 键关闭弹窗
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            window.closeFriendsModal();
+        }
+    });
+})();
 </script>

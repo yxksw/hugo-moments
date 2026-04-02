@@ -1,18 +1,8 @@
-<!-- Like button -->
-<script>
-    $(".fa-heart").click(function(){
-        if ($(this).attr("red") == 'true'){
-            $(this).animate({color:"#808080"});
-            $(this).attr("red", false);
-        } else {
-            $(this).animate({color:"#ff0000"});
-            $(this).attr("red", true);
-        }
-    });
-</script>
+<!-- Blog-Like 点赞组件 JS -->
+<script src="/scripts/zan.js"></script>
 
 <!-- fancybox -->
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+<script src="https://cdn.jsdmirror.com/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 
 <!-- videojs -->
 
@@ -40,18 +30,20 @@
 {{/*  back-top- button */}}
 <button id="back-top-button"><i class="fas fa-chevron-up"></i></button>
 <script>
+    var backTopButton = document.getElementById("back-top-button");
+    backTopButton.style.display = "none";
+
     window.onscroll = function() {scrollFunction()};
     function scrollFunction() {
         if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
-            $("#back-top-button").fadeIn();
+            backTopButton.style.display = "block";
         } else {
-            $("#back-top-button").fadeOut();
+            backTopButton.style.display = "none";
         }
     }
 
-
-    $( "#back-top-button" ).click(function() {
-        $("html, body").animate({scrollTop: 0}, 500);
+    backTopButton.addEventListener('click', function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
     });
 </script>
 
