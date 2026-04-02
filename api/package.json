@@ -1,9 +1,0 @@
-{
-  "name": "hugo-memos-likes-api",
-  "version": "1.0.0",
-  "description": "Like system API for Hugo Memos blog using MongoDB",
-  "main": "index.js",
-  "dependencies": {
-    "mongodb": "^6.3.0"
-  }
-}
