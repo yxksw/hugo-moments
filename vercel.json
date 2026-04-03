@@ -4,6 +4,6 @@
       "HUGO_VERSION": "0.154.5"
     }
   },
-  "buildCommand": "hugo && npx pagefind --site public --output-subdir pagefind",
+  "buildCommand": "hugo && npx pagefind",
   "installCommand": "npm install"
 }
