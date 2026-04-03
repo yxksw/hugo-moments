@@ -1,0 +1,36 @@
+{{ define "main" }}
+<div class="container">
+    <div class="search-page">
+        <h1 class="search-title">{{ .Title }}</h1>
+        <div class="search-container">
+            <div id="search"></div>
+        </div>
+    </div>
+</div>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js" type="text/javascript"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        new PagefindUI({
+            element: "#search",
+            showSubResults: true,
+            showImages: false,
+            excerptLength: 15,
+            translations: {
+                placeholder: "搜索文章...",
+                clear_search: "清除",
+                load_more: "加载更多结果",
+                search_label: "搜索本站内容",
+                filters_label: "筛选",
+                zero_results: "没有找到 [SEARCH_TERM] 相关结果",
+                many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
+                one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
+                alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
+                search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
+                searching: "正在搜索 [SEARCH_TERM]..."
+            }
+        });
+    });
+</script>
+{{ end }}

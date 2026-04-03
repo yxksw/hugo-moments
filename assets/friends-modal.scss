@@ -47,6 +47,47 @@
 }
 
 // ========================================
+// 搜索按钮 - 右上角
+// ========================================
+.search-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: currentColor;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.7);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ========================================
 // 友链弹窗背景
 // ========================================
 .friends-modal {
@@ -325,6 +366,195 @@
 }
 
 // ========================================
+// 搜索弹窗样式
+// ========================================
+.search-modal {
+    position: fixed;
+    z-index: 102;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.search-container-modal {
+    width: 100%;
+    max-width: 700px;
+    max-height: 80vh;
+    background-color: var(--main-background, #ffffff);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--line, rgba(243, 244, 246, 1));
+    animation: slideUp 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #2980b9;
+    flex-shrink: 0;
+}
+
+.search-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color, #333333);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+        color: #2980b9;
+    }
+}
+
+.search-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--text-sub-color, #555555);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+
+    &:hover {
+        background: var(--primary-background, #F7F7F7);
+        color: var(--text-color, #333333);
+        transform: rotate(90deg);
+    }
+}
+
+.search-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(80vh - 100px);
+
+    // 自定义滚动条
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--primary-background-hover, #DEDEDE);
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--text-sub-color, #555555);
+    }
+
+    // Pagefind UI 样式调整
+    .pagefind-ui {
+        --pagefind-ui-scale: 1;
+        --pagefind-ui-primary: #2980b9;
+        --pagefind-ui-text: var(--text-color, #333333);
+        --pagefind-ui-background: var(--main-background, #ffffff);
+        --pagefind-ui-border: var(--line, rgba(243, 244, 246, 1));
+        --pagefind-ui-tag: var(--primary-background, #F7F7F7);
+        --pagefind-ui-border-width: 1px;
+        --pagefind-ui-border-radius: 8px;
+        --pagefind-ui-image-border-radius: 8px;
+        --pagefind-ui-image-box-ratio: 3 / 2;
+        --pagefind-ui-font: inherit;
+    }
+
+    .pagefind-ui__search-input {
+        padding: 12px 16px;
+        font-size: 16px;
+        border: 2px solid var(--line, rgba(243, 244, 246, 1));
+        border-radius: 8px;
+        background: var(--primary-background, #F7F7F7);
+        color: var(--text-color, #333333);
+
+        &:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+    }
+
+    .pagefind-ui__search-clear {
+        padding: 8px 16px;
+        background: var(--primary-background, #F7F7F7);
+        border: 1px solid var(--line, rgba(243, 244, 246, 1));
+        border-radius: 6px;
+        color: var(--text-sub-color, #555555);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: var(--primary-background-hover, #DEDEDE);
+        }
+    }
+
+    .pagefind-ui__result {
+        padding: 16px;
+        margin-bottom: 12px;
+        background: var(--primary-background, #F7F7F7);
+        border: 1px solid var(--line, rgba(243, 244, 246, 1));
+        border-radius: 12px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: var(--primary-background-hover, #DEDEDE);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .pagefind-ui__result-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-color, #333333);
+        margin-bottom: 8px;
+    }
+
+    .pagefind-ui__result-excerpt {
+        font-size: 14px;
+        color: var(--text-sub-color, #555555);
+        line-height: 1.6;
+    }
+
+    .pagefind-ui__button {
+        padding: 10px 20px;
+        background: #2980b9;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: #1f6fa3;
+        }
+    }
+}
+
+// ========================================
 // 深色模式适配 - 使用 [data-theme="dark"] 匹配博客主题
 // ========================================
 [data-theme="dark"] {
@@ -335,6 +565,97 @@
 
         &:hover {
             background: rgba(255, 255, 255, 0.25);
+        }
+    }
+
+    .search-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    }
+
+    .search-container-modal {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        background-color: #2d2d2d !important;
+        border-color: #4a4a4a !important;
+    }
+
+    .search-modal-header {
+        border-bottom-color: #2980b9;
+    }
+
+    .search-modal-title {
+        color: #e0e0e0 !important;
+
+        svg {
+            color: #2980b9 !important;
+        }
+    }
+
+    .search-modal-close {
+        color: #909090 !important;
+
+        &:hover {
+            background: #3a3a3a !important;
+            color: #e0e0e0 !important;
+        }
+    }
+
+    .search-modal-body {
+        &::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #909090;
+        }
+
+        .pagefind-ui {
+            --pagefind-ui-text: #e0e0e0;
+            --pagefind-ui-background: #2d2d2d;
+            --pagefind-ui-border: #4a4a4a;
+            --pagefind-ui-tag: #3a3a3a;
+        }
+
+        .pagefind-ui__search-input {
+            background: #3a3a3a !important;
+            border-color: #4a4a4a !important;
+            color: #e0e0e0 !important;
+
+            &:focus {
+                border-color: #2980b9 !important;
+            }
+        }
+
+        .pagefind-ui__search-clear {
+            background: #3a3a3a !important;
+            border-color: #4a4a4a !important;
+            color: #cccccc !important;
+
+            &:hover {
+                background: #4a4a4a !important;
+            }
+        }
+
+        .pagefind-ui__result {
+            background: #3a3a3a !important;
+            border-color: #4a4a4a !important;
+
+            &:hover {
+                background: #4a4a4a !important;
+            }
+        }
+
+        .pagefind-ui__result-title {
+            color: #e0e0e0 !important;
+        }
+
+        .pagefind-ui__result-excerpt {
+            color: #cccccc !important;
         }
     }
 
@@ -521,6 +842,49 @@
 
     .friends-section {
         max-height: 70vh;
+    }
+
+    .search-btn {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 12px;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        span {
+            display: none;
+        }
+    }
+
+    .search-container-modal {
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .search-modal-title {
+        font-size: 18px;
+    }
+
+    .search-modal-body {
+        max-height: 70vh;
+
+        .pagefind-ui__result {
+            padding: 12px;
+        }
+
+        .pagefind-ui__result-title {
+            font-size: 14px;
+        }
+
+        .pagefind-ui__result-excerpt {
+            font-size: 12px;
+        }
     }
 
     #qexo-friends {

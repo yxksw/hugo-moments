@@ -15,6 +15,16 @@
         </svg>
         <span>友链</span>
     </button>
+
+    <!-- 搜索按钮 - 右上角 -->
+    <button class="search-btn" onclick="openSearchModal()" title="搜索">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <span>搜索</span>
+    </button>
+
     <div class="container">
         <div class="site-title">
             <a href="{{ .link }}">{{ .context.Site.Params.title }}</a>
@@ -22,3 +32,91 @@
         <p class="signature">{{ .context.Site.Params.signature }}</p>
     </div>
 </div>
+
+<!-- 搜索弹窗 -->
+<div id="search-modal" class="search-modal" style="display: none;">
+    <div class="search-container-modal">
+        <div class="search-modal-header">
+            <div class="search-modal-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                搜索文章
+            </div>
+            <button type="button" class="search-modal-close" onclick="closeSearchModal()">×</button>
+        </div>
+        <div class="search-modal-body">
+            <div id="pagefind-search"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Pagefind CSS -->
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+
+<!-- Pagefind JS -->
+<script src="/pagefind/pagefind-ui.js" type="text/javascript"></script>
+
+<script>
+// 搜索弹窗功能
+(function() {
+    var searchModal = document.getElementById('search-modal');
+    var pagefindSearch = null;
+
+    window.openSearchModal = function() {
+        searchModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        // 初始化 Pagefind 搜索（如果还没初始化）
+        if (!pagefindSearch) {
+            pagefindSearch = new PagefindUI({
+                element: "#pagefind-search",
+                showSubResults: true,
+                showImages: false,
+                excerptLength: 15,
+                translations: {
+                    placeholder: "搜索文章...",
+                    clear_search: "清除",
+                    load_more: "加载更多结果",
+                    search_label: "搜索本站内容",
+                    filters_label: "筛选",
+                    zero_results: "没有找到 [SEARCH_TERM] 相关结果",
+                    many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
+                    one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
+                    alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
+                    search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
+                    searching: "正在搜索 [SEARCH_TERM]..."
+                }
+            });
+        }
+
+        // 聚焦到搜索框
+        setTimeout(function() {
+            var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }, 100);
+    };
+
+    window.closeSearchModal = function() {
+        searchModal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    // 点击外部关闭弹窗
+    searchModal.addEventListener('click', function(e) {
+        if (e.target === searchModal) {
+            closeSearchModal();
+        }
+    });
+
+    // ESC 键关闭弹窗
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && searchModal.style.display === 'flex') {
+            closeSearchModal();
+        }
+    });
+})();
+</script>
