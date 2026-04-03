@@ -7,7 +7,7 @@
         {{ $background_path = (resources.Get $background_path).RelPermalink }}
     {{ end }}
 {{ end }}
-<div class="jumbotron" style="background-image: url({{ $background_path }});">
+<div class="jumbotron" style="background-image: url({{ $background_path }});" data-pagefind-ignore>
     <!-- 友链按钮 - 左上角 -->
     <button class="friends-btn" onclick="openFriendsModal()" title="友情链接">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">

@@ -11,9 +11,9 @@
 
             {{ block "main" . }}
             {{ end }}
-        
+
             <!-- Pagination -->
-            <div class="center">
+            <div class="center" data-pagefind-ignore>
 
                 {{ if not .Site.Params.infiniteScroll }}
 

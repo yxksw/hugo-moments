@@ -1,5 +1,5 @@
 {{ define "main" }}
-    <div class="container">
+    <div class="container" data-pagefind-body>
         {{ $pages := where $.Site.RegularPages "Section" .Section }}
         {{ $sorted := sort $pages "Date" "desc" }}
         {{ $paginator := .Paginate $sorted }}
