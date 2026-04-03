@@ -229,6 +229,16 @@
                         });
                         
                         
+                        searchContainer.addEventListener('click', function(e) {
+                            var link = e.target.closest('a[href]');
+                            if (link && link.getAttribute('href')) {
+                                
+                                closeSearchModal();
+                                
+                            }
+                        });
+                        
+                        
                         setTimeout(function() {
                             var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
                             if (searchInput) {

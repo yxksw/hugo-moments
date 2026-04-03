@@ -148,6 +148,16 @@
                             }
                         });
                         
+                        // 监听搜索结果点击事件，点击后关闭弹窗
+                        searchContainer.addEventListener('click', function(e) {
+                            var link = e.target.closest('a[href]');
+                            if (link && link.getAttribute('href')) {
+                                // 关闭搜索弹窗
+                                closeSearchModal();
+                                // 允许默认跳转行为
+                            }
+                        });
+                        
                         // 聚焦到搜索框
                         setTimeout(function() {
                             var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
