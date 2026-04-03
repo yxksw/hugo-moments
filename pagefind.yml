@@ -4,11 +4,11 @@
 # 源目录
 site: public
 
-# 只包含文章页面
+# 只包含单篇文章页面（排除列表页）
 include:
-  - '/posts/**'
+  - '/posts/*/index.html'
 
-# 排除其他页面
+# 排除其他所有页面
 exclude:
   - '/tags/**'
   - '/search/**'
@@ -21,6 +21,7 @@ exclude:
   - '/5/**'
   - '/moments/**'
   - '/categories/**'
+  - '/posts/index.html'
 
 # 添加锚点到结果
 add_anchor_to_results: false
