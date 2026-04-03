@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Hugo Memos Blog",
   "scripts": {
-    "build": "hugo && npx pagefind"
+    "build": "hugo && npx pagefind --site public --output-subdir pagefind"
   },
   "devDependencies": {
     "pagefind": "^1.1.0"
