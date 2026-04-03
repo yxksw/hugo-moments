@@ -1,6 +1,7 @@
 {{ $page := .page }}
 {{ $index := .index }}
-<div class="moment-row" id="post-{{ $page.File.UniqueID }}" data-post-url="{{ $page.RelPermalink }}" data-pagefind-body data-pagefind-meta="title:{{ $page.Title | default $page.Site.Params.title }},date:{{ $page.Date.Format "2006-01-02" }}">
+<div class="moment-row" id="post-{{ $page.File.UniqueID }}" data-post-url="{{ $page.RelPermalink }}">
+    <div data-pagefind-body data-pagefind-meta="title:{{ $page.Title | default $page.Site.Params.title }},date:{{ $page.Date.Format "2006-01-02" }}" data-pagefind-url="/#post-{{ $page.File.UniqueID }}">
 
     <div class="pure-g">
 
@@ -262,6 +263,7 @@
 
             </div>
         </div>
+    </div>
     </div>
 
 </div>

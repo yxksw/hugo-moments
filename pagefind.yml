@@ -1,5 +1,5 @@
 # Pagefind 配置文件
-# 只索引文章列表页，为每篇文章生成独立搜索结果
+# 为每篇文章生成独立搜索结果
 
 # 源目录
 site: public
@@ -15,8 +15,11 @@ exclude:
   - '/search/**'
   - '/404.html'
 
-# 为每个 data-pagefind-body 元素创建独立结果
-collapse_content: false
+# 不要合并内容，为每个 data-pagefind-body 创建独立结果
+force_language: true
 
 # 添加锚点到结果
 add_anchor_to_results: true
+
+# 为结果添加 URL 参数
+keep_index_url: true

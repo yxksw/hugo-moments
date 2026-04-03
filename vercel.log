@@ -1,0 +1,60 @@
+17:17:12.049 Running build in Washington, D.C., USA (East) – iad1
+17:17:12.049 Build machine configuration: 2 cores, 8 GB
+17:17:12.170 Cloning github.com/yxksw/hugo-moments (Branch: main, Commit: 168df88)
+17:17:12.427 Warning: Failed to fetch one or more git submodules
+17:17:12.427 Cloning completed: 256.000ms
+17:17:13.075 Restored build cache from previous deployment (8XFWhNHfApwGp4TysuStBwRvqnUT)
+17:17:13.346 Running "vercel build"
+17:17:13.967 Vercel CLI 50.38.1
+17:17:14.473 Running "install" command: `npm install`...
+17:17:15.559 
+17:17:15.560 up to date, audited 3 packages in 849ms
+17:17:15.560 
+17:17:15.560 found 0 vulnerabilities
+17:17:15.814 Start building sites … 
+17:17:15.814 hugo v0.154.5-a6f99cca223a29cad1d4cdaa6a1a90508ac1da71+extended linux/amd64 BuildDate=2026-01-11T20:53:23Z VendorInfo=gohugoio
+17:17:15.815 
+17:17:15.907 
+17:17:15.908                   │ EN 
+17:17:15.909 ──────────────────┼────
+17:17:15.909  Pages            │ 15 
+17:17:15.909  Paginator pages  │  0 
+17:17:15.909  Non-page files   │  0 
+17:17:15.909  Static files     │ 35 
+17:17:15.909  Processed images │  0 
+17:17:15.909  Aliases          │  6 
+17:17:15.909  Cleaned          │  0 
+17:17:15.909 
+17:17:15.909 Total in 96 ms
+17:17:16.256 
+17:17:16.257 Running Pagefind v1.4.0 (Extended)
+17:17:16.257 Running from: "/vercel/path0"
+17:17:16.257 Source:       "public"
+17:17:16.257 Output:       "public/pagefind"
+17:17:16.257 
+17:17:16.257 [Walking source directory]
+17:17:16.261 Found 17 files matching **/*.{html}
+17:17:16.261 
+17:17:16.261 [Parsing files]
+17:17:16.287 Found a data-pagefind-body element on the site.
+17:17:16.287 ↳ Ignoring pages without this tag.
+17:17:16.288 
+17:17:16.288 [Reading languages]
+17:17:16.288 Discovered 1 language: unknown
+17:17:16.288 
+17:17:16.288 [Building search indexes]
+17:17:16.288 Total: 
+17:17:16.288   Indexed 1 language
+17:17:16.289   Indexed 5 pages
+17:17:16.289   Indexed 30 words
+17:17:16.289   Indexed 0 filters
+17:17:16.289   Indexed 0 sorts
+17:17:16.293 
+17:17:16.294 Finished in 0.043 seconds
+17:17:16.408 Build Completed in /vercel/output [2s]
+17:17:16.778 Deploying outputs...
+17:17:18.462 Deployment completed
+17:17:19.477 Creating build cache...
+17:17:21.996 Created build cache: 3s
+17:17:21.997 Uploading build cache [74.23 MB]
+17:17:23.842 Build cache uploaded: 1.843s
