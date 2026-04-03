@@ -148,13 +148,59 @@
                             }
                         });
                         
-                        // 监听搜索结果点击事件，点击后关闭弹窗
+                        // 监听搜索结果点击事件，点击后滚动到对应文章
                         searchContainer.addEventListener('click', function(e) {
                             var link = e.target.closest('a[href]');
-                            if (link && link.getAttribute('href')) {
-                                // 关闭搜索弹窗
-                                closeSearchModal();
-                                // 允许默认跳转行为
+                            if (link) {
+                                var href = link.getAttribute('href');
+                                if (href) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    // 关闭搜索弹窗
+                                    closeSearchModal();
+                                    
+                                    // 解析 URL，获取文章路径
+                                    var url = new URL(href, window.location.origin);
+                                    var searchPath = url.pathname;
+                                    
+                                    // 在首页查找对应的文章元素（通过 data-post-url 属性匹配）
+                                    var allPosts = document.querySelectorAll('.moment-row[data-post-url]');
+                                    var foundPost = null;
+                                    
+                                    // 遍历所有文章，查找 URL 匹配的文章
+                                    for (var i = 0; i < allPosts.length; i++) {
+                                        var post = allPosts[i];
+                                        var postUrl = post.getAttribute('data-post-url');
+                                        // 标准化 URL（移除末尾斜杠）
+                                        var normalizedPostUrl = postUrl.replace(/\/$/, '');
+                                        var normalizedSearchPath = searchPath.replace(/\/$/, '');
+                                        
+                                        if (normalizedPostUrl === normalizedSearchPath || 
+                                            normalizedPostUrl.endsWith(normalizedSearchPath) ||
+                                            normalizedSearchPath.endsWith(normalizedPostUrl)) {
+                                            foundPost = post;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (foundPost) {
+                                        // 滚动到文章
+                                        foundPost.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
+                                        // 高亮文章
+                                        foundPost.style.transition = 'background-color 0.5s ease';
+                                        foundPost.style.backgroundColor = 'rgba(41, 128, 185, 0.1)';
+                                        setTimeout(function() {
+                                            foundPost.style.backgroundColor = '';
+                                        }, 2000);
+                                    } else {
+                                        // 如果没找到，尝试直接跳转到文章页面
+                                        window.location.href = href;
+                                    }
+                                }
                             }
                         });
                         

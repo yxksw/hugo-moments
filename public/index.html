@@ -231,10 +231,56 @@
                         
                         searchContainer.addEventListener('click', function(e) {
                             var link = e.target.closest('a[href]');
-                            if (link && link.getAttribute('href')) {
-                                
-                                closeSearchModal();
-                                
+                            if (link) {
+                                var href = link.getAttribute('href');
+                                if (href) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    
+                                    
+                                    closeSearchModal();
+                                    
+                                    
+                                    var url = new URL(href, window.location.origin);
+                                    var searchPath = url.pathname;
+                                    
+                                    
+                                    var allPosts = document.querySelectorAll('.moment-row[data-post-url]');
+                                    var foundPost = null;
+                                    
+                                    
+                                    for (var i = 0; i < allPosts.length; i++) {
+                                        var post = allPosts[i];
+                                        var postUrl = post.getAttribute('data-post-url');
+                                        
+                                        var normalizedPostUrl = postUrl.replace(/\/$/, '');
+                                        var normalizedSearchPath = searchPath.replace(/\/$/, '');
+                                        
+                                        if (normalizedPostUrl === normalizedSearchPath || 
+                                            normalizedPostUrl.endsWith(normalizedSearchPath) ||
+                                            normalizedSearchPath.endsWith(normalizedPostUrl)) {
+                                            foundPost = post;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (foundPost) {
+                                        
+                                        foundPost.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'center'
+                                        });
+                                        
+                                        foundPost.style.transition = 'background-color 0.5s ease';
+                                        foundPost.style.backgroundColor = 'rgba(41, 128, 185, 0.1)';
+                                        setTimeout(function() {
+                                            foundPost.style.backgroundColor = '';
+                                        }, 2000);
+                                    } else {
+                                        
+                                        window.location.href = href;
+                                    }
+                                }
                             }
                         });
                         
@@ -290,7 +336,7 @@
         
             
 
-<div class="moment-row">
+<div class="moment-row" id="post-7090144d9d3ff5a63ca8f869920be3d1" data-post-url="/posts/3/">
 
     <div class="pure-g">
 
@@ -609,7 +655,7 @@
         
             
 
-<div class="moment-row">
+<div class="moment-row" id="post-caddf61b1c1cb451e97e1ca8dc619466" data-post-url="/posts/2/">
 
     <div class="pure-g">
 
@@ -926,7 +972,7 @@
         
             
 
-<div class="moment-row">
+<div class="moment-row" id="post-f991457469b1a40f511b0bcac7ac654d" data-post-url="/posts/1/">
 
     <div class="pure-g">
 

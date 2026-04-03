@@ -1,6 +1,6 @@
 {{ $page := .page }}
 {{ $index := .index }}
-<div class="moment-row">
+<div class="moment-row" id="post-{{ $page.File.UniqueID }}" data-post-url="{{ $page.RelPermalink }}">
 
     <div class="pure-g">
 
