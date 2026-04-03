@@ -1,10 +1,10 @@
 ---
 title: "搜索"
 layout: search
-_build:
+build:
   list: never
   render: always
 cascade:
-  _build:
+  build:
     list: never
 ---
