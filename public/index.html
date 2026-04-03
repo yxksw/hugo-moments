@@ -241,8 +241,23 @@
                                     closeSearchModal();
                                     
                                     
-                                    var url = new URL(href, window.location.origin);
-                                    var searchPath = url.pathname;
+                                    
+                                    var searchPath = href;
+                                    
+                                    
+                                    if (href.startsWith('/')) {
+                                        searchPath = href;
+                                    } else if (!href.startsWith('http')) {
+                                        
+                                        searchPath = '/' + href;
+                                    } else {
+                                        
+                                        var url = new URL(href);
+                                        searchPath = url.pathname;
+                                    }
+                                    
+                                    
+                                    searchPath = searchPath.replace(/\/$/, '');
                                     
                                     
                                     var allPosts = document.querySelectorAll('.moment-row[data-post-url]');
@@ -254,11 +269,13 @@
                                         var postUrl = post.getAttribute('data-post-url');
                                         
                                         var normalizedPostUrl = postUrl.replace(/\/$/, '');
-                                        var normalizedSearchPath = searchPath.replace(/\/$/, '');
                                         
-                                        if (normalizedPostUrl === normalizedSearchPath || 
-                                            normalizedPostUrl.endsWith(normalizedSearchPath) ||
-                                            normalizedSearchPath.endsWith(normalizedPostUrl)) {
+                                        
+                                        if (normalizedPostUrl === searchPath || 
+                                            normalizedPostUrl.endsWith(searchPath) ||
+                                            searchPath.endsWith(normalizedPostUrl) ||
+                                            normalizedPostUrl.includes(searchPath) ||
+                                            searchPath.includes(normalizedPostUrl)) {
                                             foundPost = post;
                                             break;
                                         }

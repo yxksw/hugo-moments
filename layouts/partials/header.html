@@ -160,11 +160,26 @@
                                     // 关闭搜索弹窗
                                     closeSearchModal();
                                     
-                                    // 解析 URL，获取文章路径
-                                    var url = new URL(href, window.location.origin);
-                                    var searchPath = url.pathname;
+                                    // 获取搜索结果的 URL 路径
+                                    // Pagefind 返回的链接可能是相对路径或绝对路径
+                                    var searchPath = href;
                                     
-                                    // 在首页查找对应的文章元素（通过 data-post-url 属性匹配）
+                                    // 如果是相对路径，转换为绝对路径
+                                    if (href.startsWith('/')) {
+                                        searchPath = href;
+                                    } else if (!href.startsWith('http')) {
+                                        // 相对路径，添加当前域名
+                                        searchPath = '/' + href;
+                                    } else {
+                                        // 绝对路径，提取 pathname
+                                        var url = new URL(href);
+                                        searchPath = url.pathname;
+                                    }
+                                    
+                                    // 标准化：移除末尾斜杠
+                                    searchPath = searchPath.replace(/\/$/, '');
+                                    
+                                    // 在首页查找对应的文章元素
                                     var allPosts = document.querySelectorAll('.moment-row[data-post-url]');
                                     var foundPost = null;
                                     
@@ -172,13 +187,15 @@
                                     for (var i = 0; i < allPosts.length; i++) {
                                         var post = allPosts[i];
                                         var postUrl = post.getAttribute('data-post-url');
-                                        // 标准化 URL（移除末尾斜杠）
+                                        // 标准化文章 URL
                                         var normalizedPostUrl = postUrl.replace(/\/$/, '');
-                                        var normalizedSearchPath = searchPath.replace(/\/$/, '');
                                         
-                                        if (normalizedPostUrl === normalizedSearchPath || 
-                                            normalizedPostUrl.endsWith(normalizedSearchPath) ||
-                                            normalizedSearchPath.endsWith(normalizedPostUrl)) {
+                                        // 检查是否匹配（完全匹配或部分匹配）
+                                        if (normalizedPostUrl === searchPath || 
+                                            normalizedPostUrl.endsWith(searchPath) ||
+                                            searchPath.endsWith(normalizedPostUrl) ||
+                                            normalizedPostUrl.includes(searchPath) ||
+                                            searchPath.includes(normalizedPostUrl)) {
                                             foundPost = post;
                                             break;
                                         }
