@@ -3,5 +3,7 @@
     "env": {
       "HUGO_VERSION": "0.154.5"
     }
-  }
+  },
+  "buildCommand": "hugo && npx pagefind --site public",
+  "installCommand": "npm install"
 }
