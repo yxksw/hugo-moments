@@ -446,9 +446,39 @@
 }
 
 .search-modal-body {
-    flex: 1;
-    overflow-y: auto;
-    max-height: calc(80vh - 100px);
+        flex: 1;
+        overflow-y: auto;
+        max-height: calc(80vh - 100px);
+
+        // 加载和错误状态
+        .search-loading-state,
+        .search-error-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-sub-color, #555555);
+
+            p {
+                margin: 0;
+                font-size: 14px;
+            }
+        }
+
+        .search-error-state {
+            p:first-child {
+                font-size: 16px;
+                font-weight: 600;
+                color: #dc3545;
+                margin-bottom: 10px;
+            }
+
+            code {
+                font-family: 'Courier New', monospace;
+                background: #e0e0e0;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 12px;
+            }
+        }
 
     // 自定义滚动条
     &::-webkit-scrollbar {

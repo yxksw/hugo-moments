@@ -3,34 +3,86 @@
     <div class="search-page">
         <h1 class="search-title">{{ .Title }}</h1>
         <div class="search-container">
-            <div id="search"></div>
+            <div id="search">
+                <div class="search-loading-state">
+                    <p>正在加载搜索功能...</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-ui.js" type="text/javascript"></script>
 <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        new PagefindUI({
-            element: "#search",
-            showSubResults: true,
-            showImages: false,
-            excerptLength: 15,
-            translations: {
-                placeholder: "搜索文章...",
-                clear_search: "清除",
-                load_more: "加载更多结果",
-                search_label: "搜索本站内容",
-                filters_label: "筛选",
-                zero_results: "没有找到 [SEARCH_TERM] 相关结果",
-                many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
-                one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
-                alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
-                search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
-                searching: "正在搜索 [SEARCH_TERM]..."
+    // 检查 Pagefind 是否可用
+    (function() {
+        var searchContainer = document.getElementById('search');
+        
+        // 尝试加载 Pagefind
+        function loadPagefind() {
+            // 检查 CSS 和 JS 是否已加载
+            var cssLoaded = false;
+            var jsLoaded = false;
+            
+            // 创建 CSS 链接
+            var cssLink = document.createElement('link');
+            cssLink.href = '/pagefind/pagefind-ui.css';
+            cssLink.rel = 'stylesheet';
+            cssLink.onload = function() {
+                cssLoaded = true;
+                checkAndInit();
+            };
+            cssLink.onerror = function() {
+                showError('搜索索引尚未生成，请先运行：npx pagefind --site public');
+            };
+            document.head.appendChild(cssLink);
+            
+            // 创建 JS 脚本
+            var jsScript = document.createElement('script');
+            jsScript.src = '/pagefind/pagefind-ui.js';
+            jsScript.onload = function() {
+                jsLoaded = true;
+                checkAndInit();
+            };
+            jsScript.onerror = function() {
+                showError('搜索索引尚未生成，请先运行：npx pagefind --site public');
+            };
+            document.head.appendChild(jsScript);
+        }
+        
+        function checkAndInit() {
+            if (typeof PagefindUI !== 'undefined') {
+                try {
+                    new PagefindUI({
+                        element: "#search",
+                        showSubResults: true,
+                        showImages: false,
+                        excerptLength: 15,
+                        translations: {
+                            placeholder: "搜索文章...",
+                            clear_search: "清除",
+                            load_more: "加载更多结果",
+                            search_label: "搜索本站内容",
+                            filters_label: "筛选",
+                            zero_results: "没有找到 [SEARCH_TERM] 相关结果",
+                            many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
+                            one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
+                            alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
+                            search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
+                            searching: "正在搜索 [SEARCH_TERM]..."
+                        }
+                    });
+                } catch (e) {
+                    showError('搜索初始化失败：' + e.message);
+                }
             }
-        });
-    });
+        }
+        
+        function showError(message) {
+            searchContainer.innerHTML = '<div class="search-error-state"><p>' + message + '</p><p style="font-size: 14px; margin-top: 10px;">构建命令：<code>npx pagefind --site public</code></p></div>';
+        }
+        
+        // 延迟加载，确保 DOM 完全加载
+        setTimeout(loadPagefind, 100);
+    })();
 </script>
 {{ end }}

@@ -43,7 +43,7 @@
 
 
 
-<link rel="stylesheet" href="/friends-modal.min.c91d7e267ded92651177a07e6570350d3219191aca6f3d4f37c3d4c4ea9babf4.css">
+<link rel="stylesheet" href="/friends-modal.min.2ef8272dc6f82dd99666fc6a3f37e4c0c159bc70c653ada1b1af7f007ea9a06e.css">
 
 
 <link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/@fancyapps/ui/dist/fancybox.css"/>
@@ -127,22 +127,70 @@
             <button type="button" class="search-modal-close" onclick="closeSearchModal()">×</button>
         </div>
         <div class="search-modal-body">
-            <div id="pagefind-search"></div>
+            <div id="pagefind-search">
+                <div class="search-loading-state">
+                    <p>正在加载搜索功能...</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-
-
-<script src="/pagefind/pagefind-ui.js" type="text/javascript"></script>
 
 <script>
 
 (function() {
     var searchModal = document.getElementById('search-modal');
     var pagefindSearch = null;
+    var pagefindLoaded = false;
+
+    
+    function loadPagefindResources(callback) {
+        if (pagefindLoaded) {
+            callback(true);
+            return;
+        }
+
+        var cssLink = document.createElement('link');
+        cssLink.href = '/pagefind/pagefind-ui.css';
+        cssLink.rel = 'stylesheet';
+        
+        var jsScript = document.createElement('script');
+        jsScript.src = '/pagefind/pagefind-ui.js';
+        
+        var loadedCount = 0;
+        var hasError = false;
+        
+        function checkComplete() {
+            loadedCount++;
+            if (loadedCount >= 2 && !hasError) {
+                pagefindLoaded = true;
+                callback(true);
+            }
+        }
+        
+        cssLink.onload = checkComplete;
+        cssLink.onerror = function() {
+            hasError = true;
+            callback(false, 'CSS 加载失败');
+        };
+        
+        jsScript.onload = checkComplete;
+        jsScript.onerror = function() {
+            hasError = true;
+            callback(false, '搜索索引尚未生成');
+        };
+        
+        document.head.appendChild(cssLink);
+        document.head.appendChild(jsScript);
+        
+        
+        setTimeout(function() {
+            if (loadedCount < 2 && !hasError) {
+                hasError = true;
+                callback(false, '加载超时，请检查搜索索引是否存在');
+            }
+        }, 5000);
+    }
 
     window.openSearchModal = function() {
         searchModal.style.display = 'flex';
@@ -150,34 +198,57 @@
 
         
         if (!pagefindSearch) {
-            pagefindSearch = new PagefindUI({
-                element: "#pagefind-search",
-                showSubResults: true,
-                showImages: false,
-                excerptLength: 15,
-                translations: {
-                    placeholder: "搜索文章...",
-                    clear_search: "清除",
-                    load_more: "加载更多结果",
-                    search_label: "搜索本站内容",
-                    filters_label: "筛选",
-                    zero_results: "没有找到 [SEARCH_TERM] 相关结果",
-                    many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
-                    one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
-                    alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
-                    search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
-                    searching: "正在搜索 [SEARCH_TERM]..."
+            loadPagefindResources(function(success, error) {
+                var searchContainer = document.getElementById('pagefind-search');
+                
+                if (!success) {
+                    searchContainer.innerHTML = '<div class="search-error-state"><p>搜索功能暂不可用</p><p style="font-size: 14px; margin-top: 10px; color: #666;">' + error + '</p><p style="font-size: 13px; margin-top: 15px; padding: 10px; background: #f5f5f5; border-radius: 6px;">构建命令：<code style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px;">npx pagefind --site public</code></p></div>';
+                    return;
+                }
+                
+                if (typeof PagefindUI !== 'undefined') {
+                    try {
+                        pagefindSearch = new PagefindUI({
+                            element: "#pagefind-search",
+                            showSubResults: true,
+                            showImages: false,
+                            excerptLength: 15,
+                            translations: {
+                                placeholder: "搜索文章...",
+                                clear_search: "清除",
+                                load_more: "加载更多结果",
+                                search_label: "搜索本站内容",
+                                filters_label: "筛选",
+                                zero_results: "没有找到 [SEARCH_TERM] 相关结果",
+                                many_results: "找到 [COUNT] 个 [SEARCH_TERM] 相关结果",
+                                one_result: "找到 1 个 [SEARCH_TERM] 相关结果",
+                                alt_search: "未找到 [SEARCH_TERM] 的结果，正在显示 [DIFFERENT_TERM] 的结果",
+                                search_suggestion: "未找到 [SEARCH_TERM] 的结果，请尝试以下搜索：",
+                                searching: "正在搜索 [SEARCH_TERM]..."
+                            }
+                        });
+                        
+                        
+                        setTimeout(function() {
+                            var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
+                            if (searchInput) {
+                                searchInput.focus();
+                            }
+                        }, 100);
+                    } catch (e) {
+                        searchContainer.innerHTML = '<div class="search-error-state"><p>搜索初始化失败</p><p style="font-size: 14px; margin-top: 10px;">' + e.message + '</p></div>';
+                    }
                 }
             });
+        } else {
+            
+            setTimeout(function() {
+                var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }, 100);
         }
-
-        
-        setTimeout(function() {
-            var searchInput = searchModal.querySelector('.pagefind-ui__search-input');
-            if (searchInput) {
-                searchInput.focus();
-            }
-        }, 100);
     };
 
     window.closeSearchModal = function() {
