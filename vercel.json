@@ -4,6 +4,6 @@
       "HUGO_VERSION": "0.154.5"
     }
   },
-  "buildCommand": "hugo && npx pagefind --site public --exclude-selectors '[data-pagefind-ignore]'",
+  "buildCommand": "hugo && npx pagefind",
   "installCommand": "npm install"
 }

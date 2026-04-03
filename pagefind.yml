@@ -1,0 +1,24 @@
+# Pagefind 配置文件
+# 参考：https://pagefind.app/docs/config/
+
+# 站点源目录
+site: public
+
+# 输出目录
+output_path: static/pagefind
+
+# 排除选择器
+exclude_selectors:
+  - '[data-pagefind-ignore]'
+
+# 为每篇文章添加元数据
+# 使用 data-pagefind-meta 属性
+
+# 自定义过滤器
+filter:
+  # 只索引文章页面
+  include:
+    - '/posts/**'
+
+# 为每个结果添加锚点
+add_anchor_to_results: true

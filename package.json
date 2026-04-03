@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Hugo Memos Blog",
   "scripts": {
-    "build": "hugo && npx pagefind --site public --exclude-selectors '[data-pagefind-ignore]'"
+    "build": "hugo && npx pagefind"
   },
   "devDependencies": {
     "pagefind": "^1.1.0"
