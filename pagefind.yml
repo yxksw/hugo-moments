@@ -15,11 +15,5 @@ exclude:
   - '/search/**'
   - '/404.html'
 
-# 不要合并内容，为每个 data-pagefind-body 创建独立结果
-force_language: true
-
 # 添加锚点到结果
 add_anchor_to_results: true
-
-# 为结果添加 URL 参数
-keep_index_url: true
