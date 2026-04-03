@@ -4,16 +4,23 @@
 # 源目录
 site: public
 
-# 只包含文章列表页
+# 只包含文章页面
 include:
-  - '/index.html'
-  - '/posts/index.html'
+  - '/posts/**'
 
 # 排除其他页面
 exclude:
   - '/tags/**'
   - '/search/**'
   - '/404.html'
+  - '/index.html'
+  - '/1/**'
+  - '/2/**'
+  - '/3/**'
+  - '/4/**'
+  - '/5/**'
+  - '/moments/**'
+  - '/categories/**'
 
 # 添加锚点到结果
-add_anchor_to_results: true
+add_anchor_to_results: false
